@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "156525070760",
+    "firebase_url": "https://fogzone.firebaseio.com",
+    "project_id": "fogzone",
+    "storage_bucket": "fogzone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156525070760:android:828209dd709529bd95f59d",
+        "android_client_info": {
+          "package_name": "com.example.logint"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156525070760-gbvfm0s0s1nkourgc0dmjhb0d5pf1por.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.logint",
+            "certificate_hash": "9a7f54a33cb02912941668163fa3fb4460996d5c"
+          }
+        },
+        {
+          "client_id": "156525070760-bpn3po0soaj8sbevtf5cvu751edbh05n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCohRB41smoCdFjF-xoepazwka7yqSwkSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156525070760-bpn3po0soaj8sbevtf5cvu751edbh05n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
