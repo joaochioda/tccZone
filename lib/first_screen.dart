@@ -8,7 +8,6 @@ class BttNav extends StatefulWidget {
   State<StatefulWidget> createState() {
     return FirstScreen();
   }
-
 }
 
 class FirstScreen extends State<BttNav> {

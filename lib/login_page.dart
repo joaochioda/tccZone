@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'register.dart';
 import 'first_screen.dart';
 
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -18,8 +19,6 @@ class _LoginPageState extends State<LoginPage> {
       "email": email,
     };
 
-    print(token);
-    print(email);
     var body = json.encode(data);
     var response = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: body);
