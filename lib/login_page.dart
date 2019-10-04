@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Future<http.Response> checkIsRegistered() async {
+  checkIsRegistered() async {
     var url = 'https://pure-scrubland-45679.herokuapp.com/registered';
     Map data = {
       "token": token,
