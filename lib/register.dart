@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:logint/sign_in.dart';
+import 'first_screen.dart';
 
 class Estado {
   final int id;
@@ -214,8 +216,34 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
 
   void Submit() {
     if (formKey.currentState.validate()) {
-      formKey.currentState.save();
+     createAccount();
     }
+  }
+
+   createAccount() async{
+ var url = 'https://pure-scrubland-45679.herokuapp.com/person';
+    Map data = {
+      "name": name,
+      "estado": _selectedCompanyEstado.nome,
+      "cidade": _selectedCompanyCidade.nome,
+      "token": token,
+      "email": email,
+    };
+
+    var body = json.encode(data);
+    var response = await http.post(url,
+        headers: {"Content-Type": "application/json"}, body: body);
+
+        if(response.body.toString() == "true") {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return BttNav();
+              },
+            ),
+          );
+        }
+
   }
 
   onChangeDropdownItem(Estado selectedCompany) {
