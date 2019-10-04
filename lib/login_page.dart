@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:logint/sign_in.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'register.dart';
 import 'first_screen.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,6 +12,36 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  checkIsRegistered() async {
+    var url = 'https://pure-scrubland-45679.herokuapp.com/registered';
+    Map data = {
+      "token": token,
+      "email": email,
+    };
+
+    var body = json.encode(data);
+    var response = await http.post(url,
+        headers: {"Content-Type": "application/json"}, body: body);
+
+        if(response.body.toString() == "false") {
+           Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return Register();
+              },
+            ),
+          );
+        } else {
+           Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return BttNav();
+              },
+            ),
+          );
+        }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,13 +67,7 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: Colors.grey,
       onPressed: () {
         signInWithGoogle().whenComplete(() {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return FirstScreen();
-              },
-            ),
-          );
+          checkIsRegistered();
         });
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
@@ -52,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
+            // Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(

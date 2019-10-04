@@ -7,6 +7,7 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 String name;
 String email;
 String imageUrl;
+String token;
 
 Future<String> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -24,9 +25,12 @@ Future<String> signInWithGoogle() async {
   assert(user.email != null);
   assert(user.displayName != null);
   assert(user.photoUrl != null);
+  assert(user.getIdToken() != null);
+  
   name = user.displayName;
   email = user.email;
   imageUrl = user.photoUrl;
+  token = user.uid;
 // Only taking the first part of the name, i.e., First Name
   if (name.contains(" ")) {
     name = name.substring(0, name.indexOf(" "));
