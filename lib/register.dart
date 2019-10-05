@@ -124,6 +124,7 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
         title: new Text("Queretemos te conhecer"),
       ),
