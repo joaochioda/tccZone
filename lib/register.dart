@@ -148,7 +148,7 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
                           if (value.isEmpty) {
                             return "Por favor preencha o campo";
                           }
-                          return null;
+                          name = value;
                         },
                         onSaved: (value) => name = value,
                       ),

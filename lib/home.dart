@@ -42,20 +42,6 @@ class Home extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
                SizedBox(height: 40),
-              Text(
-                'Token',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54),
-              ),
-              Text(
-                token,
-                style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.deepPurple,
-                    fontWeight: FontWeight.bold),
-              ),
               SizedBox(height: 20),
               Text(
                 'EMAIL',
