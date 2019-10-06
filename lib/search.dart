@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'registerEssencia.dart';
+
+
+  String sabor;
+  String gosto;
+  String comentario;
+
+  List<Essencia> essenciaG = [];
+  List<Marca> marcaG = [];
 
 class Search extends StatelessWidget {
   @override
@@ -27,10 +36,14 @@ class MySearchPage extends StatefulWidget {
 }
 
 class _MySearchPageState extends State<MySearchPage> {
-  List<Essencia> essenciaG = [];
-  List<Marca> marcaG = [];
-  _getUsers() async {
-    if (essenciaG.isEmpty) {
+
+
+Future<Null> refreshPage() async {
+  _getUsers(true);
+}
+
+  _getUsers(refresh) async {
+    if (essenciaG.isEmpty || refresh==true) {
       var data =
           await http.get("https://pure-scrubland-45679.herokuapp.com/essencia");
 
@@ -66,111 +79,94 @@ class _MySearchPageState extends State<MySearchPage> {
     return true;
   }
 
-getEssencia(int j,int l) {
-  List<Essencia> ess = [];
-
-    for(int i=0;i<essenciaG.length;i++) {
-        if(essenciaG[i].marca.id == marcaG[j].id) {
-          ess.add(essenciaG[i]);
-  }
+  getEssencia(int j, int l) {
+    List<Essencia> ess = [];
+    for (int i = 0; i < essenciaG.length; i++) {
+      if (essenciaG[i].marca.id == marcaG[j].id) {
+        ess.add(essenciaG[i]);
+      }
     }
-    
-      return ess[l].sabor;
-
-}
-
-getWidth(int k) {
-  int contador=0;
-  for (int i=0;i<essenciaG.length;i++)
-  {
-    if(essenciaG[i].marca.id == marcaG[k].id) {
-      contador++;
-    }
+    return ess[l].sabor;
   }
-  return contador;
-}
 
-getTapped(int j,int l) {
-  List<Essencia> ess = [];
-
-    for(int i=0;i<essenciaG.length;i++) {
-        if(essenciaG[i].marca.id == marcaG[j].id) {
-          ess.add(essenciaG[i]);
-  }
+  getWidth(int k) {
+    int contador = 0;
+    for (int i = 0; i < essenciaG.length; i++) {
+      if (essenciaG[i].marca.id == marcaG[k].id) {
+        contador++;
+      }
     }
-    
-      print("Voce clicou ${ess[l].sabor}");
+    return contador;
+  }
 
-}
+  getTapped(int j, int l) {
+    List<Essencia> ess = [];
+
+    for (int i = 0; i < essenciaG.length; i++) {
+      if (essenciaG[i].marca.id == marcaG[j].id) {
+        ess.add(essenciaG[i]);
+      }
+    }
+
+    print("Voce clicou ${ess[l].sabor}");
+  }
+
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(title: new Text("Lista de essências")),
-        body: Container(
-            child: FutureBuilder(
-                future: _getUsers(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.data == null) {
-                    return Container(child: Center(child: Text("Loading...")));
-                  } else {
-                    return ListView.builder(
-                        itemCount: marcaG == null ? 0 : marcaG.length,
-                        itemBuilder: (BuildContext context, int marcaIndex) {
-                          return Container(
-                              child: ExpansionTile(
-                            title: ListTile(
-                              title: Text(marcaG[marcaIndex].marca),
-                            ),
-                            children: <Widget>[
-                              ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                      child: ListTile(
-                                    title: Text(getEssencia(marcaIndex,index)),
-                                    onTap: () => getTapped(marcaIndex, index),
-                                  ));
-                                },
-                                itemCount: getWidth(marcaIndex),
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                              )
-                            ],
-                          ));
-                        });
-                  }
-                })));
-    // return new Scaffold(
-    //   appBar: new AppBar(
-    //     title: new Text(widget.title),
-    //   ),
-    //   body: Container(
-    //       child: FutureBuilder(
-    //         future: _getUsers(),
-    //         builder: (BuildContext context, AsyncSnapshot snapshot){
-    //           if(snapshot.data == null){
-    //             return Container(
-    //               child: Center(
-    //                 child: Text("Loading...")
-    //               )
-    //             );
-    //           } else {
-    //             return ListView.builder(
-    //               itemCount: snapshot.data.length,
-    //               itemBuilder: (BuildContext context, int index) {
-    //                 return ListTile(
-    //                   leading: CircleAvatar(
-    //                   ),
-    //                   title: Text(snapshot.data[index].marca),
-    //                   subtitle: Text(snapshot.data[index].gosto),
-
-    //                 );
-    //               },
-    //             );
-    //           }
-    //         },
-    //       ),
-    //     ),
-    //   );
+      resizeToAvoidBottomInset: false,
+      appBar: new AppBar(title: new Text("Lista de essências")),
+      body: new RefreshIndicator(
+        onRefresh: refreshPage,
+     child: new  Container(
+          child: FutureBuilder(
+              future: _getUsers(false),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return Container(child: Center(child: Text("Loading...")));
+                } else {
+                  return ListView.builder(
+                      itemCount: marcaG == null ? 0 : marcaG.length,
+                      itemBuilder: (BuildContext context, int marcaIndex) {
+                        return Container(
+                          
+                          
+                            child: ExpansionTile(
+                          title: ListTile(
+                            title: Text(marcaG[marcaIndex].marca),
+                          ),
+                          children: <Widget>[
+                            ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Container(
+                                    child: ListTile(
+                                  title: Text(getEssencia(marcaIndex, index)),
+                                  onTap: () => getTapped(marcaIndex, index),
+                                ));
+                              },
+                              itemCount: getWidth(marcaIndex),
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                            )
+                          ],
+                        ));
+                        
+                      });
+                }
+              }))),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context)
+                .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+              return new RegisterEssencia();
+            }));
+        },
+        backgroundColor: Colors.deepPurple,
+      ),
+    );
   }
 }
 

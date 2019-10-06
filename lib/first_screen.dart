@@ -42,31 +42,5 @@ class FirstScreen extends State<BttNav> {
           },
         ),
       );
-    // return Scaffold(
-    //   body: _pageOptions[_selectedPage],
-    //   bottomNavigationBar: BottomNavigationBar(
-    //       currentIndex: _selectedPage,
-    //       onTap: (int index) {
-    //         setState(() {
-    //           _selectedPage = index;
-    //         });
-    //       },
-        
-    //       items: [
-    //         BottomNavigationBarItem(
-    //           icon: Icon(Icons.home),
-    //           title: Text('Home'),
-    //         ),
-    //         BottomNavigationBarItem(
-    //           icon: Icon(Icons.search),
-    //           title: Text('Busca'),
-    //         ),
-    //         BottomNavigationBarItem(
-    //           icon: Icon(Icons.score),
-    //           title: Text('Pontos'),
-    //         ),
-    //       ],
-    //     ),
-    // );
   }
 }
