@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'detailsEssencia.dart';
 import 'registerEssencia.dart';
 
 
@@ -40,6 +41,25 @@ class _MySearchPageState extends State<MySearchPage> {
 
 Future<Null> refreshPage() async {
   _getUsers(true);
+}
+
+void _showModalSheet(int j, int l) {
+  Essencia essencia = getTapped(j, l);
+    showModalBottomSheet(context: context, builder: (builder) {
+      return Container(
+        padding: EdgeInsets.all(40.0),
+        child: ListTile(
+        title: Text('Clique aqui \nPara ver mais detalhes da "${essencia.gosto}"'),
+        onTap:  () {
+          
+          Navigator.of(context)
+                .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+              return new DetailsEssencia(essencia: essencia,);
+            }));
+        },
+        )
+      );
+    });
 }
 
   _getUsers(refresh) async {
@@ -108,7 +128,7 @@ Future<Null> refreshPage() async {
       }
     }
 
-    print("Voce clicou ${ess[l].sabor}");
+  return ess[l];
   }
 
   final formKey = GlobalKey<FormState>();
@@ -143,7 +163,7 @@ Future<Null> refreshPage() async {
                                 return Container(
                                     child: ListTile(
                                   title: Text(getEssencia(marcaIndex, index)),
-                                  onTap: () => getTapped(marcaIndex, index),
+                                  onTap: () => _showModalSheet(marcaIndex, index),
                                 ));
                               },
                               itemCount: getWidth(marcaIndex),
