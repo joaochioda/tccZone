@@ -31,7 +31,6 @@ class _DetailsEssencia extends State<DetailsEssencia> {
             children: <Widget>[                    
               ListTile(
                 title: Text("Sabor: ${essencia.sabor}"),
-                
               ),
               ListTile(
                 title: Text("Gosto: ${essencia.gosto}"),
