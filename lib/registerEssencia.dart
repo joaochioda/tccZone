@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'entities.dart';
+import 'sign_in.dart';
 
 class RegisterEssencia extends StatefulWidget {
   RegisterEssencia({Key key}) : super(key: key);
@@ -32,15 +34,67 @@ class _RegisterEssencia extends State<RegisterEssencia> {
       "gosto": gosto,
       "sabor": sabor,
       "comentario": comentario,
-      "marca": [{
-        "id": _selectedCompanyEstado.id,
-        "marca": _selectedCompanyEstado.marca,
-      }]
+      "marca": [
+        {
+          "id": _selectedCompanyEstado.id,
+          "marca": _selectedCompanyEstado.marca,
+        }
+      ]
     };
-
     var body = json.encode(data);
+
     var response = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: body);
+
+    var jsonData = json.decode(response.body);
+
+    Marca marc =
+        Marca(jsonData["marca"][0]["id"], jsonData["marca"][0]["marca"]);
+    Essencia essencia = Essencia(
+        jsonData["id"],
+        marc,
+        jsonData["gosto"],
+        jsonData["sabor"],
+        jsonData["comentario"],
+        jsonData["reputacao"],
+        jsonData["status"]);
+
+var url3 = 'https://pure-scrubland-45679.herokuapp.com/me';
+    Map data3 = {
+      "token": token,
+      "email": email
+    };
+
+    var body3 = json.encode(data3);
+    var response3 = await http.post(url3,
+        headers: {"Content-Type": "application/json"}, body: body3);
+
+    String idMee = response3.body;
+
+    Map data1 = {
+      "essencia": {
+        "id": essencia.id,
+        "gosto": essencia.gosto,
+        "sabor": essencia.sabor,
+        "comentario": essencia.comentario,
+        "marca": [
+          {
+            "id": essencia.marca.id,
+            "marca": essencia.marca.marca,
+          }
+        ]
+      },
+      "owner": {
+        "id":idMee,
+        }
+    };
+
+
+    var body1 = json.encode(data1);
+    var url1 = 'https://pure-scrubland-45679.herokuapp.com/waitapprove';
+
+    await http.post(url1,
+        headers: {"Content-Type": "application/json"}, body: body1);
 
   }
 
@@ -86,7 +140,6 @@ class _RegisterEssencia extends State<RegisterEssencia> {
                 future: populateDropDown(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.data == "false") {
-                    print("ta aqui");
                     return Container(child: Center(child: Text("Loading...")));
                   } else {
                     return Padding(
@@ -136,7 +189,7 @@ class _RegisterEssencia extends State<RegisterEssencia> {
                                     child: SizedBox(
                                       height: 20.0,
                                     )),
-                                Text("Selecione o estado onde mora"),
+                                Text("Selecione a marca da essência"),
                                 DropdownButton(
                                   value: _selectedCompanyEstado,
                                   items: _dropdownMenuItemsEstado,

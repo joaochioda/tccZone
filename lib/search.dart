@@ -5,10 +5,11 @@ import 'package:logint/sign_in.dart';
 import 'dart:convert';
 import 'detailsEssencia.dart';
 import 'registerEssencia.dart';
-
+import 'entities.dart';
 String sabor;
 String gosto;
 String comentario;
+String idMe;
 
 List<Essencia> essenciaG = [];
 List<Marca> marcaG = [];
@@ -39,6 +40,14 @@ class MySearchPage extends StatefulWidget {
 class _MySearchPageState extends State<MySearchPage> {
   Future<Null> refreshPage() async {
     _getUsers(true);
+  }
+Choice _selectedChoice = choices[0];
+
+ void _select(Choice choice) {
+    // Causes the app to rebuild with the new _selectedChoice.
+    setState(() {
+      _selectedChoice = choice;
+    });
   }
 
   void _showModalSheet(int j, int l) {
@@ -72,7 +81,6 @@ class _MySearchPageState extends State<MySearchPage> {
           await http.get("https://pure-scrubland-45679.herokuapp.com/marca");
       var jsonData = json.decode(data.body);
       var jsonData1 = json.decode(data1.body);
-
       List<Essencia> users = [];
       List<Marca> marca = [];
 
@@ -80,9 +88,11 @@ class _MySearchPageState extends State<MySearchPage> {
         Marca marc = Marca(u["marca"][0]["id"], u["marca"][0]["marca"]);
 
         Essencia user = Essencia(u["id"], marc, u["gosto"], u["sabor"],
-            u["comentario"], u["reputacao"]);
+            u["comentario"], u["reputacao"], u["status"]);
 
+        if(user.status == "CREATED") {
         users.add(user);
+        }
       }
 
       for (var u in jsonData1) {
@@ -110,6 +120,9 @@ getMe() async {
     var body = json.encode(data);
     var response = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: body);
+
+    idMe = response.body;
+
     return response.body;
 }
 
@@ -136,6 +149,8 @@ Map data = {
         ess.add(essenciaG[i]);
       }
     }
+
+
     return ess[l].sabor;
   }
 
@@ -167,7 +182,15 @@ Map data = {
   Widget build(BuildContext context) {
     return new Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: new AppBar(title: new Text("Lista de essências")),
+      appBar: new AppBar(title: new Text("Essências aprovadas"),
+      actions: <Widget>[
+         IconButton(
+              icon: Icon(choices[0].icon),
+              onPressed: () {
+                print("carrega outra tela");
+              },
+            )
+      ],),
       body: new RefreshIndicator(
           onRefresh: refreshPage,
           child: new Container(
@@ -235,32 +258,14 @@ Map data = {
   }
 }
 
-class Essencia {
-  final int id;
-  final String gosto;
-  final String sabor;
-  final Marca marca;
-  final String comentario;
-  final int reputacao;
+class Choice {
+  const Choice({this.title, this.icon});
 
-  Essencia(this.id, this.marca, this.gosto, this.sabor, this.comentario,
-      this.reputacao);
+  final String title;
+  final IconData icon;
 }
 
-class Marca {
-  final int id;
-  final String marca;
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Car', icon: Icons.extension),
+];
 
-  Marca(this.id, this.marca);
-}
-
-// class Person {
-//   final int id;
-//   final String name;
-//   final String estado;
-//   final String cidade;
-//   final String token;
-//   final String email;
-
-//   Person(this.id, this.name, this.estado, this.cidade, this.token, this.email);
-// }

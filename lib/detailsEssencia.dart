@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'entities.dart';
 
 class DetailsEssencia extends StatefulWidget {
   final Essencia essencia;
