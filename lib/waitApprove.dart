@@ -4,6 +4,7 @@ import 'package:logint/entities.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'first_screen.dart';
 
 class WaitApprovee extends StatefulWidget {
   WaitApprovee({Key key}) : super(key: key);
@@ -14,9 +15,38 @@ class WaitApprovee extends StatefulWidget {
 
 class _WaitApprovee extends State<WaitApprovee> {
   List<WaitApprove> waitApprove;
+  approveDeny(id, type) async {
+    String typ;
+    if (type == true) {
+      typ = "approve";
+      var url =
+          ("https://pure-scrubland-45679.herokuapp.com/waitapprove/${waitApprove[id].id}/${typ}");
+      Map data = {
+        "id": idMe,
+      };
+      var body = json.encode(data);
 
-  getWaitApprove() async {
-    if (waitApprove == null) {
+      await http.post(url,
+          headers: {"Content-Type": "application/json"}, body: body);
+    } else {
+      typ = "deny";
+      var url =
+          ("https://pure-scrubland-45679.herokuapp.com/waitapprove/${waitApprove[id].id}/${typ}");
+      Map data = {
+        "person": {
+          "id": idMe,
+        },
+        "String": "",
+      };
+      var body = json.encode(data);
+
+      await http.post(url,
+          headers: {"Content-Type": "application/json"}, body: body);
+    }
+  }
+
+  getWaitApprove(reload) async {
+    if (waitApprove == null || reload == true) {
       var data = await http
           .get("https://pure-scrubland-45679.herokuapp.com/waitapprove");
       var jsonData = json.decode(data.body);
@@ -37,6 +67,7 @@ class _WaitApprovee extends State<WaitApprovee> {
           peopleA.add(po);
         }
 
+        SimplePerson owner = SimplePerson(u["owner"]["id"],u["owner"]["name"],u["owner"]["email"]);
         Marca marca = Marca(u["essencia"]["marca"][0]["id"],
             u["essencia"]["marca"][0]["marca"]);
 
@@ -49,9 +80,9 @@ class _WaitApprovee extends State<WaitApprovee> {
             u["essencia"]["reputacao"],
             u["essencia"]["status"]);
 
-        WaitApprove waitApprove = WaitApprove(u["id"], essencia, person, people,
+        WaitApprove waitApprove = WaitApprove(u["id"], essencia, owner, people,
             peopleA, u["message"], u["status"]);
-
+        
         waitApproves.add(waitApprove);
       }
       if (this.mounted) {
@@ -64,25 +95,25 @@ class _WaitApprovee extends State<WaitApprovee> {
     return true;
   }
 
-getNames(int index) {
-  String result = '';
-  for (var n in waitApprove[index].peoplePro) {
-    result = result + n.name + "\n";
+  getNames(int index) {
+    String result = '';
+    for (var n in waitApprove[index].peoplePro) {
+      result = result + n.name + "\n";
+    }
+    if (result == '') {
+      return "Ninguém por enquanto";
+    }
+    return result;
   }
-  if(result == '') {
-    return "Ninguém por enquanto";
-  }
-  return result;
-}
+
   void _showMaterialDialog(int marcaIndex) {
-    print(waitApprove[marcaIndex].peoplePro.length);
     showDialog(
         context: context,
         builder: (builder) {
           return AlertDialog(
             content: Container(
-              width: 400,
-              height: 400,
+                width: 400,
+                height: 400,
                 child: Column(
                   children: <Widget>[
                     Padding(
@@ -104,6 +135,11 @@ getNames(int index) {
                       padding: EdgeInsets.all(16.0),
                       child: Text(
                           "Comentário: ${waitApprove[marcaIndex].essencia.comentario}"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                          "Criador do post: ${waitApprove[marcaIndex].owner.name}"),
                     ),
                     Padding(
                       padding: EdgeInsets.all(16.0),
@@ -133,25 +169,98 @@ getNames(int index) {
       ),
       body: Container(
           child: FutureBuilder(
-              future: getWaitApprove(),
+              future: getWaitApprove(false),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                   return Container(child: Center(child: Text("Loading...")));
                 } else {
                   return ListView.builder(
+                      padding: const EdgeInsets.all(15.0),
                       itemCount: waitApprove == null ? 0 : waitApprove.length,
                       itemBuilder: (BuildContext context, int marcaIndex) {
-                        return Container(
+                        return Dismissible(
+                          key: ObjectKey(waitApprove[marcaIndex]),
                           child: ListTile(
                               title:
                                   Text(waitApprove[marcaIndex].essencia.sabor),
                               onTap: () {
                                 _showMaterialDialog(marcaIndex);
                               }),
+                          onDismissed: (direction) {
+                            if (direction == DismissDirection.endToStart) {
+                              approveDeny(marcaIndex, false);
+                              getWaitApprove(true);
+                              print("reprovou");
+                            } else {
+                              approveDeny(marcaIndex, true);
+                              getWaitApprove(true);
+                              print("aprovou");
+                            }
+                          },
+                          background: slideRightBackground(),
+                          secondaryBackground: slideLeftBackground(),
                         );
                       });
                 }
               })),
     );
   }
+}
+
+Widget slideRightBackground() {
+  return Container(
+    color: Colors.green,
+    child: Align(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            width: 20,
+          ),
+          Icon(
+            Icons.thumb_up,
+            color: Colors.white,
+          ),
+          Text(
+            " Aprovar",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ],
+      ),
+      alignment: Alignment.centerLeft,
+    ),
+  );
+}
+
+Widget slideLeftBackground() {
+  return Container(
+    color: Colors.red,
+    child: Align(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Icon(
+            Icons.thumb_down,
+            color: Colors.white,
+          ),
+          Text(
+            " Reprovar",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.right,
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ],
+      ),
+      alignment: Alignment.centerRight,
+    ),
+  );
 }

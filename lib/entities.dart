@@ -33,7 +33,7 @@ class Marca {
 class WaitApprove {
   final int id;
   final Essencia essencia;
-  final Person owner;
+  final SimplePerson owner;
   final List<SimplePerson> peoplePro;
   final List<SimplePerson> peopleAgainst;
   final String message;
