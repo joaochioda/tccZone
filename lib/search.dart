@@ -181,9 +181,9 @@ class _MySearchPageState extends State<MySearchPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
-        title: new Text("Essências aprovadas"),
+        title: new Text("           Essências aprovadas"),
         actions: <Widget>[
           IconButton(
             icon: Icon(choices[0].icon),

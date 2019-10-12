@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:logint/api/requests.dart';
 import 'package:logint/entities.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'first_screen.dart';
+import 'home.dart';
 
 class WaitApprovee extends StatefulWidget {
   WaitApprovee({Key key}) : super(key: key);
