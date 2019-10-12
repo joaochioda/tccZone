@@ -64,14 +64,25 @@ class _WaitApprovee extends State<WaitApprovee> {
     return true;
   }
 
+getNames(int index) {
+  String result = '';
+  for (var n in waitApprove[index].peoplePro) {
+    result = result + n.name + "\n";
+  }
+  if(result == '') {
+    return "Ninguém por enquanto";
+  }
+  return result;
+}
   void _showMaterialDialog(int marcaIndex) {
+    print(waitApprove[marcaIndex].peoplePro.length);
     showDialog(
         context: context,
         builder: (builder) {
           return AlertDialog(
             content: Container(
-                width: 300.0,
-                height: 300.0,
+              width: 400,
+              height: 400,
                 child: Column(
                   children: <Widget>[
                     Padding(
@@ -94,13 +105,19 @@ class _WaitApprovee extends State<WaitApprovee> {
                       child: Text(
                           "Comentário: ${waitApprove[marcaIndex].essencia.comentario}"),
                     ),
-                     RaisedButton(
-                padding: const EdgeInsets.all(8.0),
-                    textColor: Colors.white,
-                    color: Colors.blue,
-                     onPressed: ()=> Navigator.of(context, rootNavigator: true).pop(),
-                    child: new Text("Fechar"),
-                     ) 
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                          "Pessoas que já aprovaram: ${getNames(marcaIndex)}"),
+                    ),
+                    RaisedButton(
+                      padding: const EdgeInsets.all(8.0),
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      onPressed: () =>
+                          Navigator.of(context, rootNavigator: true).pop(),
+                      child: new Text("Fechar"),
+                    )
                   ],
                 )),
           );
