@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'detailsEssencia.dart';
 import 'registerEssencia.dart';
 import 'entities.dart';
+import 'waitApprove.dart';
+
 String sabor;
 String gosto;
 String comentario;
@@ -41,9 +43,10 @@ class _MySearchPageState extends State<MySearchPage> {
   Future<Null> refreshPage() async {
     _getUsers(true);
   }
-Choice _selectedChoice = choices[0];
 
- void _select(Choice choice) {
+  Choice _selectedChoice = choices[0];
+
+  void _select(Choice choice) {
     // Causes the app to rebuild with the new _selectedChoice.
     setState(() {
       _selectedChoice = choice;
@@ -90,8 +93,8 @@ Choice _selectedChoice = choices[0];
         Essencia user = Essencia(u["id"], marc, u["gosto"], u["sabor"],
             u["comentario"], u["reputacao"], u["status"]);
 
-        if(user.status == "CREATED") {
-        users.add(user);
+        if (user.status == "CREATED") {
+          users.add(user);
         }
       }
 
@@ -110,12 +113,9 @@ Choice _selectedChoice = choices[0];
     return true;
   }
 
-getMe() async {
-  var url = 'https://pure-scrubland-45679.herokuapp.com/me';
-    Map data = {
-      "token": token,
-      "email": email
-    };
+  getMe() async {
+    var url = 'https://pure-scrubland-45679.herokuapp.com/me';
+    Map data = {"token": token, "email": email};
 
     var body = json.encode(data);
     var response = await http.post(url,
@@ -124,24 +124,25 @@ getMe() async {
     idMe = response.body;
 
     return response.body;
-}
+  }
 
-addFavorite(int j, int l) async{
-Essencia essencia = getTapped(j, l);
-var personId=null;
- await getMe().then((id) => {
-   personId=id,
- }
-);
-var url = 'https://pure-scrubland-45679.herokuapp.com/person/${personId}/essencia';
-Map data = {
+  addFavorite(int j, int l) async {
+    Essencia essencia = getTapped(j, l);
+    var personId = null;
+    await getMe().then((id) => {
+          personId = id,
+        });
+    var url =
+        'https://pure-scrubland-45679.herokuapp.com/person/${personId}/essencia';
+    Map data = {
       "id": essencia.id,
     };
 
     var body = json.encode(data);
-      await http.post(url,
+    await http.post(url,
         headers: {"Content-Type": "application/json"}, body: body);
-}
+  }
+
   getEssencia(int j, int l) {
     List<Essencia> ess = [];
     for (int i = 0; i < essenciaG.length; i++) {
@@ -149,7 +150,6 @@ Map data = {
         ess.add(essenciaG[i]);
       }
     }
-
 
     return ess[l].sabor;
   }
@@ -182,15 +182,20 @@ Map data = {
   Widget build(BuildContext context) {
     return new Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: new AppBar(title: new Text("Essências aprovadas"),
-      actions: <Widget>[
-         IconButton(
-              icon: Icon(choices[0].icon),
-              onPressed: () {
-                print("carrega outra tela");
-              },
-            )
-      ],),
+      appBar: new AppBar(
+        title: new Text("Essências aprovadas"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(choices[0].icon),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute<Null>(builder: (BuildContext context) {
+                return new WaitApprovee();
+              }));
+            },
+          )
+        ],
+      ),
       body: new RefreshIndicator(
           onRefresh: refreshPage,
           child: new Container(
@@ -268,4 +273,3 @@ class Choice {
 const List<Choice> choices = const <Choice>[
   const Choice(title: 'Car', icon: Icons.extension),
 ];
-

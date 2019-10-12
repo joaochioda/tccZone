@@ -31,14 +31,15 @@ class Marca {
 }
 
 class WaitApprove {
+  final int id;
   final Essencia essencia;
   final Person owner;
-  final List<Person> peoplePro;
-  final List<Person> peopleAgainst;
+  final List<SimplePerson> peoplePro;
+  final List<SimplePerson> peopleAgainst;
   final String message;
   final String status;
 
-  WaitApprove(this.essencia, this.owner, this.peoplePro, this.peopleAgainst, this.message, this.status);
+  WaitApprove(this.id,this.essencia, this.owner, this.peoplePro, this.peopleAgainst, this.message, this.status);
 }
 
 class Person {
@@ -48,6 +49,17 @@ class Person {
   final String cidade;
   final String token;
   final String email;
+  final String pontos;
+  final List<Essencia> essencias;
 
-  Person(this.id, this.name, this.estado, this.cidade, this.token, this.email);
+  Person(this.id, this.name, this.estado, this.cidade, this.token, this.email,this.pontos,this.essencias);
+}
+
+class SimplePerson {
+  final int id;
+  final String name;
+  final String email;
+
+  SimplePerson(this.id, this.name, this.email);
+  
 }
