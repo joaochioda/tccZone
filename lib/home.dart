@@ -87,7 +87,7 @@ class _Home extends State<Home> {
                           ),
                           SizedBox(height: 40),
                           Text(
-                            'NAME',
+                            'NAME (email)',
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
