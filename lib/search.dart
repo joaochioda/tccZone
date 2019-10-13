@@ -12,6 +12,7 @@ String sabor;
 String gosto;
 String comentario;
 String idMe;
+bool first = true;
 
 List<Essencia> essenciaG = [];
 List<Marca> marcaG = [];
@@ -41,13 +42,12 @@ class MySearchPage extends StatefulWidget {
 
 class _MySearchPageState extends State<MySearchPage> {
   Future<Null> refreshPage() async {
-    _getUsers(true);
+    _getUsers(true,true);
   }
 
   Choice _selectedChoice = choices[0];
 
   void _select(Choice choice) {
-    // Causes the app to rebuild with the new _selectedChoice.
     setState(() {
       _selectedChoice = choice;
     });
@@ -75,8 +75,9 @@ class _MySearchPageState extends State<MySearchPage> {
         });
   }
 
-  _getUsers(refresh) async {
-    if (essenciaG.isEmpty || refresh == true) {
+  _getUsers(refresh, firsts) async {
+  
+    if ((refresh==true) && (firsts == true)) {
       var data =
           await http.get("https://pure-scrubland-45679.herokuapp.com/essencia");
 
@@ -91,7 +92,7 @@ class _MySearchPageState extends State<MySearchPage> {
         Marca marc = Marca(u["marca"][0]["id"], u["marca"][0]["marca"]);
 
         Essencia user = Essencia(u["id"], marc, u["gosto"], u["sabor"],
-            u["comentario"], u["reputacao"], u["status"]);
+            u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"]);
 
         if (user.status == "CREATED") {
           users.add(user);
@@ -106,6 +107,7 @@ class _MySearchPageState extends State<MySearchPage> {
         setState(() {
           essenciaG = users;
           marcaG = marca;
+          first = false;
         });
       }
       return true;
@@ -151,7 +153,7 @@ class _MySearchPageState extends State<MySearchPage> {
       }
     }
 
-    return ess[l].sabor;
+    return ess[l].nome;
   }
 
   getWidth(int k) {
@@ -180,6 +182,7 @@ class _MySearchPageState extends State<MySearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    _getUsers(true, first);
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
@@ -200,7 +203,7 @@ class _MySearchPageState extends State<MySearchPage> {
           onRefresh: refreshPage,
           child: new Container(
               child: FutureBuilder(
-                  future: _getUsers(false),
+                  future: _getUsers(true,false),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.data == null) {
                       return Container(
@@ -228,7 +231,7 @@ class _MySearchPageState extends State<MySearchPage> {
                                         ),
                                         onDismissed: (direction) {
                                           addFavorite(marcaIndex, index);
-                                          _getUsers(true);
+                                          _getUsers(true,true);
                                         },
                                         background:
                                             Container(color: Colors.red),

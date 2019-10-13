@@ -18,9 +18,11 @@ class Essencia {
   final String comentario;
   final int reputacao;
   final String status;
+  final String nome;
+  final String proposta;
 
   Essencia(this.id, this.marca, this.gosto, this.sabor, this.comentario,
-      this.reputacao, this.status);
+      this.reputacao, this.status, this.nome, this.proposta);
 }
 
 class Marca {

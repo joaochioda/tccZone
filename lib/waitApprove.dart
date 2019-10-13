@@ -66,22 +66,26 @@ class _WaitApprovee extends State<WaitApprovee> {
           peopleA.add(po);
         }
 
-        SimplePerson owner = SimplePerson(u["owner"]["id"],u["owner"]["name"],u["owner"]["email"]);
+        SimplePerson owner = SimplePerson(
+            u["owner"]["id"], u["owner"]["name"], u["owner"]["email"]);
         Marca marca = Marca(u["essencia"]["marca"][0]["id"],
             u["essencia"]["marca"][0]["marca"]);
 
         Essencia essencia = Essencia(
-            u["essencia"]["id"],
-            marca,
-            u["essencia"]["gosto"],
-            u["essencia"]["sabor"],
-            u["essencia"]["comentario"],
-            u["essencia"]["reputacao"],
-            u["essencia"]["status"]);
+          u["essencia"]["id"],
+          marca,
+          u["essencia"]["gosto"],
+          u["essencia"]["sabor"],
+          u["essencia"]["comentario"],
+          u["essencia"]["reputacao"],
+          u["essencia"]["status"],
+          u["essencia"]["nome"],
+          u["essencia"]["proposta"],
+        );
 
         WaitApprove waitApprove = WaitApprove(u["id"], essencia, owner, people,
             peopleA, u["message"], u["status"]);
-        
+
         waitApproves.add(waitApprove);
       }
       if (this.mounted) {
@@ -97,7 +101,7 @@ class _WaitApprovee extends State<WaitApprovee> {
   getNames(int index) {
     String result = '';
     for (var n in waitApprove[index].peoplePro) {
-      result = result + n.name + "\n";
+      result = result + n.name + "| ";
     }
     if (result == '') {
       return "Ninguém por enquanto";
@@ -112,41 +116,51 @@ class _WaitApprovee extends State<WaitApprovee> {
           return AlertDialog(
             content: Container(
                 width: 400,
-                height: 400,
+                height: 500,
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(12.0),
+                      child: Text(
+                          "Nome: ${waitApprove[marcaIndex].essencia.nome}"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                           "Sabor: ${waitApprove[marcaIndex].essencia.sabor}"),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(12.0),
+                      child: Text(
+                          "Proposta: ${waitApprove[marcaIndex].essencia.proposta}"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                           "Gosto: ${waitApprove[marcaIndex].essencia.gosto}"),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                           "Marca: ${waitApprove[marcaIndex].essencia.marca.marca}"),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                           "Comentário: ${waitApprove[marcaIndex].essencia.comentario}"),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                           "Criador do post: ${waitApprove[marcaIndex].owner.name}"),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                           "Pessoas que já aprovaram: ${getNames(marcaIndex)}"),
                     ),
                     RaisedButton(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(12.0),
                       textColor: Colors.white,
                       color: Colors.blue,
                       onPressed: () =>
@@ -181,7 +195,7 @@ class _WaitApprovee extends State<WaitApprovee> {
                           key: ObjectKey(waitApprove[marcaIndex]),
                           child: ListTile(
                               title:
-                                  Text(waitApprove[marcaIndex].essencia.sabor),
+                                  Text(waitApprove[marcaIndex].essencia.nome),
                               onTap: () {
                                 _showMaterialDialog(marcaIndex);
                               }),

@@ -22,7 +22,7 @@ class _Favoritas extends State<Favoritas> {
     for (var u in jsonData["essencias"]) {
       Marca marc = Marca(u["marca"][0]["id"], u["marca"][0]["marca"]);
       Essencia essencia = Essencia(u["id"], marc, u["gosto"], u["sabor"],
-          u["comentario"], u["reputacao"], u["status"]);
+          u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"]);
       essenciaList.add(essencia);
     }
 
@@ -56,7 +56,17 @@ class _Favoritas extends State<Favoritas> {
                     Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Text(
+                          "Nome: ${essenciaG[marcaIndex].nome}"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
                           "Sabor: ${essenciaG[marcaIndex].sabor}"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                          "Proposta: ${essenciaG[marcaIndex].proposta}"),
                     ),
                     Padding(
                       padding: EdgeInsets.all(16.0),

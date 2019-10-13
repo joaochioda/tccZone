@@ -17,6 +17,8 @@ class _RegisterEssencia extends State<RegisterEssencia> {
   String gosto;
   String sabor;
   String comentario;
+  String nome;
+  String proposta;
 
   List<DropdownMenuItem<Marca>> _dropdownMenuItemsEstado;
   Marca _selectedCompanyEstado;
@@ -34,6 +36,8 @@ class _RegisterEssencia extends State<RegisterEssencia> {
       "gosto": gosto,
       "sabor": sabor,
       "comentario": comentario,
+      "nome": nome,
+      "proposta": proposta,
       "marca": [
         {
           "id": _selectedCompanyEstado.id,
@@ -57,6 +61,8 @@ class _RegisterEssencia extends State<RegisterEssencia> {
         jsonData["sabor"],
         jsonData["comentario"],
         jsonData["reputacao"],
+        jsonData["nome"],
+        jsonData["proposta"],
         jsonData["status"]);
 
 var url3 = 'https://pure-scrubland-45679.herokuapp.com/me';
@@ -77,6 +83,8 @@ var url3 = 'https://pure-scrubland-45679.herokuapp.com/me';
         "gosto": essencia.gosto,
         "sabor": essencia.sabor,
         "comentario": essencia.comentario,
+        "nome": essencia.nome,
+        "proposta": essencia.proposta,
         "marca": [
           {
             "id": essencia.marca.id,
@@ -178,7 +186,26 @@ var url3 = 'https://pure-scrubland-45679.herokuapp.com/me';
                                 }
                                 comentario = value;
                               },
-                              // onSaved: (value) => comentario = value,
+                            ),
+                             TextFormField(
+                              decoration:
+                                  InputDecoration(labelText: "Nome"),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Por favor preencha o campo";
+                                }
+                                nome = value;
+                              },
+                            ),
+                             TextFormField(
+                              decoration:
+                                  InputDecoration(labelText: "Proposta"),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Por favor preencha o campo";
+                                }
+                                proposta = value;
+                              },
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
