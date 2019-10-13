@@ -28,7 +28,7 @@ class _Register extends State<Register> {
   Estado _selectedCompanyEstado;
   List<DropdownMenuItem<Cidade>> _dropdownMenuItemsCidade;
   Cidade _selectedCompanyCidade;
-  bool changeCidade=true;
+  bool changeCidade = true;
 
   @override
   void initState() {
@@ -36,53 +36,53 @@ class _Register extends State<Register> {
   }
 
   getCidade(int idI) async {
-    if(changeCidade == true) {
-    String id = idI.toString();
-    var data = await http
-        .get("https://servicodados.ibge.gov.br/api/v1/localidades/estados/"+id+"/municipios");
+    if (changeCidade == true) {
+      String id = idI.toString();
+      var data = await http.get(
+          "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" +
+              id +
+              "/municipios");
 
-    List<Cidade> users = [];
-    var jsonData = json.decode(data.body);
+      List<Cidade> users = [];
+      var jsonData = json.decode(data.body);
 
-    for (var u in jsonData) {
-      Cidade user = Cidade(u["id"], u["nome"]);
-      users.add(user);
-    }
-    users.sort((a, b) => a.nome.compareTo(b.nome));
+      for (var u in jsonData) {
+        Cidade user = Cidade(u["id"], u["nome"]);
+        users.add(user);
+      }
+      users.sort((a, b) => a.nome.compareTo(b.nome));
 
-    _dropdownMenuItemsCidade = buildDropdownMenuItemsCidade(users);
-    _selectedCompanyCidade = _dropdownMenuItemsCidade[0].value;
+      _dropdownMenuItemsCidade = buildDropdownMenuItemsCidade(users);
+      _selectedCompanyCidade = _dropdownMenuItemsCidade[0].value;
 
-
-    return true;
+      return true;
     } else {
       return true;
     }
   }
 
   getEstado() async {
-    if(_dropdownMenuItemsEstado == null) {
-    var data = await http
-        .get("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+    if (_dropdownMenuItemsEstado == null) {
+      var data = await http
+          .get("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
 
-    List<Estado> users = [];
-    var jsonData = json.decode(data.body);
+      List<Estado> users = [];
+      var jsonData = json.decode(data.body);
 
-    for (var u in jsonData) {
-      Estado user = Estado(u["id"], u["nome"]);
-      users.add(user);
-    }
-    users.sort((a, b) => a.nome.compareTo(b.nome));
+      for (var u in jsonData) {
+        Estado user = Estado(u["id"], u["nome"]);
+        users.add(user);
+      }
+      users.sort((a, b) => a.nome.compareTo(b.nome));
 
-    _dropdownMenuItemsEstado = buildDropdownMenuItemsEstado(users);
-    _selectedCompanyEstado = _dropdownMenuItemsEstado[0].value;
-    await getCidade(_selectedCompanyEstado.id);
+      _dropdownMenuItemsEstado = buildDropdownMenuItemsEstado(users);
+      _selectedCompanyEstado = _dropdownMenuItemsEstado[0].value;
+      await getCidade(_selectedCompanyEstado.id);
 
-    return true;
-    }
-    else {
-    await getCidade(_selectedCompanyEstado.id);
-    return true;
+      return true;
+    } else {
+      await getCidade(_selectedCompanyEstado.id);
+      return true;
     }
   }
 
@@ -101,7 +101,7 @@ class _Register extends State<Register> {
     return items;
   }
 
-List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
+  List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
     List<DropdownMenuItem<Cidade>> items = List();
 
     for (Cidade company in companies) {
@@ -116,14 +116,13 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
     return items;
   }
 
-
-
   final formKey = GlobalKey<FormState>();
   String name;
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
         title: new Text("Queretemos te conhecer"),
       ),
@@ -147,7 +146,7 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
                           if (value.isEmpty) {
                             return "Por favor preencha o campo";
                           }
-                          return null;
+                          name = value;
                         },
                         onSaved: (value) => name = value,
                       ),
@@ -211,17 +210,18 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
           },
         ),
       ),
+     
     );
   }
 
   void Submit() {
     if (formKey.currentState.validate()) {
-     createAccount();
+      createAccount();
     }
   }
 
-   createAccount() async{
- var url = 'https://pure-scrubland-45679.herokuapp.com/person';
+  createAccount() async {
+    var url = 'https://pure-scrubland-45679.herokuapp.com/person';
     Map data = {
       "name": name,
       "estado": _selectedCompanyEstado.nome,
@@ -234,20 +234,18 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
     var response = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: body);
 
-        if(response.body.toString() == "true") {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return BttNav();
-              },
-            ),
-          );
-        }
-
+    if (response.body.toString() == "true") {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return BttNav();
+          },
+        ),
+      );
+    }
   }
 
   onChangeDropdownItem(Estado selectedCompany) {
-    
     setState(() {
       _selectedCompanyEstado = selectedCompany;
       changeCidade = true;
@@ -255,9 +253,9 @@ List<DropdownMenuItem<Cidade>> buildDropdownMenuItemsCidade(List companies) {
   }
 
   onChangeDropdownItemCidade(Cidade selectedCompany) {
-   setState(() {
-     changeCidade = false;
-     _selectedCompanyCidade = selectedCompany;
-   });
+    setState(() {
+      changeCidade = false;
+      _selectedCompanyCidade = selectedCompany;
+    });
   }
 }

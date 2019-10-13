@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>156525070760-crsoc5pap0f32kcdokskjg4k77v842a7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.156525070760-crsoc5pap0f32kcdokskjg4k77v842a7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>156525070760-gbvfm0s0s1nkourgc0dmjhb0d5pf1por.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBlKT8V03ETHTmP5wBWCxvoCaw-s2ECeUY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>156525070760</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.logint</string>
+	<key>PROJECT_ID</key>
+	<string>fogzone</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fogzone.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:156525070760:ios:b11b515473dbc33795f59d</string>
+	<key>DATABASE_URL</key>
+	<string>https://fogzone.firebaseio.com</string>
+</dict>
+</plist>
