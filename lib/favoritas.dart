@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:async';
 import 'entities.dart';
 import 'home.dart';
 
@@ -17,7 +16,7 @@ class Favoritas extends StatefulWidget {
 class _Favoritas extends State<Favoritas> {
   getEssencias() async {
     var data = await http
-        .get("https://pure-scrubland-45679.herokuapp.com/person/${idMe}");
+        .get("https://pure-scrubland-45679.herokuapp.com/person/$idMe");
     var jsonData = json.decode(data.body);
     List<Essencia> essenciaList = [];
     for (var u in jsonData["essencias"]) {
@@ -90,7 +89,7 @@ class _Favoritas extends State<Favoritas> {
   }
 
   removeEssencia(index) async {
-    var url = 'https://pure-scrubland-45679.herokuapp.com/person/${idMe}/essencia/${essenciaG[index].id}';
+    var url = 'https://pure-scrubland-45679.herokuapp.com/person/$idMe/essencia/${essenciaG[index].id}';
    
      await http.delete(url,
         headers: {"Content-Type": "application/json"});

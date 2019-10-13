@@ -142,7 +142,7 @@ class _Register extends State<Register> {
                     children: <Widget>[
                       TextFormField(
                         decoration: InputDecoration(labelText: "Nome"),
-                        validator: (value) {
+                        validator: (value){
                           if (value.isEmpty) {
                             return "Por favor preencha o campo";
                           }

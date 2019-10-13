@@ -4,11 +4,6 @@ import 'package:logint/favoritas.dart';
 import 'package:logint/home.dart';
 import 'package:logint/search.dart';
 import 'package:logint/info.dart';
-import 'sign_in.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'entities.dart';
 
 
 class BttNav extends StatefulWidget {
@@ -20,7 +15,6 @@ class BttNav extends StatefulWidget {
 
 class FirstScreen extends State<BttNav> {
   int _selectedPage =0;
-  int _page = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
   
 

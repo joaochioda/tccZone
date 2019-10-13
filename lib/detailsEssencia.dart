@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'search.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'entities.dart';
 
 class DetailsEssencia extends StatefulWidget {
@@ -17,7 +14,6 @@ class _DetailsEssencia extends State<DetailsEssencia> {
   Essencia essencia;
   _DetailsEssencia(this.essencia);
 
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext ctxt) {
     return new Scaffold(

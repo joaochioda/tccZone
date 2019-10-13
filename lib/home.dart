@@ -3,7 +3,6 @@ import 'package:logint/login_page.dart';
 import 'package:logint/sign_in.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'first_screen.dart';
 
 int pontos;
 String idMe;
@@ -23,7 +22,7 @@ class _Home extends State<Home> {
       await getMe();
     }
     var data = await http.get(
-        'https://pure-scrubland-45679.herokuapp.com/person/${idMe}/pontos');
+        'https://pure-scrubland-45679.herokuapp.com/person/$idMe/pontos');
     var jsonData = json.decode(data.body);
     if (this.mounted) {
       if (pontos == jsonData) {
