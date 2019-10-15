@@ -219,10 +219,11 @@ class _MySearchPageState extends State<MySearchPage> {
                                 ),
                                 children: <Widget>[
                                   ListView.builder(
+                                    itemCount: getWidth(marcaIndex),
                                     itemBuilder: (context, index) {
                                       return Dismissible(
                                         direction: DismissDirection.endToStart,
-                                        key: ObjectKey(essenciaG[marcaIndex]),
+                                        key: ObjectKey(essenciaG[marcaIndex-1]),
                                         child: ListTile(
                                           title: Text(
                                               getEssencia(marcaIndex, index)),
@@ -242,7 +243,6 @@ class _MySearchPageState extends State<MySearchPage> {
                                         ),
                                       );
                                     },
-                                    itemCount: getWidth(marcaIndex),
                                     shrinkWrap: true,
                                     physics: const ClampingScrollPhysics(),
                                   )
