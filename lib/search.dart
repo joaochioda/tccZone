@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:logint/sign_in.dart';
 import 'dart:convert';
 import 'detailsEssencia.dart';
 import 'registerEssencia.dart';
 import 'entities.dart';
 import 'waitApprove.dart';
+import 'home.dart';
 
 String sabor;
 String gosto;
 String comentario;
-String idMe;
 bool first = true;
 
 List<Essencia> essenciaG = [];
@@ -115,27 +114,13 @@ class _MySearchPageState extends State<MySearchPage> {
     return true;
   }
 
-  getMe() async {
-    var url = 'https://pure-scrubland-45679.herokuapp.com/me';
-    Map data = {"token": token, "email": email};
-
-    var body = json.encode(data);
-    var response = await http.post(url,
-        headers: {"Content-Type": "application/json"}, body: body);
-
-    idMe = response.body;
-
-    return response.body;
-  }
-
   addFavorite(int j, int l) async {
     Essencia essencia = getTapped(j, l);
-    var personId = null;
-    await getMe().then((id) => {
-          personId = id,
-        });
-    var url =
-        'https://pure-scrubland-45679.herokuapp.com/person/${personId}/essencia';
+print(essencia.nome);
+print(essencia.id);
+
+var url =
+        'https://pure-scrubland-45679.herokuapp.com/person/${idMe}/essencia';
     Map data = {
       "id": essencia.id,
     };
@@ -274,5 +259,5 @@ class Choice {
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Car', icon: Icons.extension),
+  const Choice(title: 'Car', icon: Icons.gamepad),
 ];

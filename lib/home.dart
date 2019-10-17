@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:logint/entities.dart';
 import 'package:logint/login_page.dart';
 import 'package:logint/sign_in.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 int pontos;
-String idMe;
-
+int idMe;
+String nameUser;
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
 
@@ -44,11 +45,15 @@ class _Home extends State<Home> {
       var response = await http.post(url,
           headers: {"Content-Type": "application/json"}, body: body);
 
-      idMe = response.body;
+      var jsonData = json.decode(response.body);
+      IdNamePerson pe = IdNamePerson(jsonData["id"],jsonData["name"]);
+      print(pe.name);
+      print(pe.id);
 
-      if (idMe != response.body) {
+      if (idMe != pe.id) {
         setState(() {
-          idMe = response.body;
+          idMe = pe.id;
+          nameUser = pe.name;
         });
       }
     }
@@ -86,14 +91,14 @@ class _Home extends State<Home> {
                           ),
                           SizedBox(height: 40),
                           Text(
-                            'NAME (email)',
+                            'NAME:',
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black54),
                           ),
                           Text(
-                            name,
+                            nameUser,
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.deepPurple,

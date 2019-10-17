@@ -14,6 +14,8 @@ class WaitApprovee extends StatefulWidget {
 
 class _WaitApprovee extends State<WaitApprovee> {
   List<WaitApprove> waitApprove;
+  int countApprove;
+  int countAgainst;
   approveDeny(id, type) async {
     String typ;
     if (type == true) {
@@ -50,6 +52,8 @@ class _WaitApprovee extends State<WaitApprovee> {
           .get("https://pure-scrubland-45679.herokuapp.com/waitapprove");
       var jsonData = json.decode(data.body);
       Person person;
+      int peoplePro;
+      int peopleAgainst;
       List<WaitApprove> waitApproves = [];
       for (var u in jsonData) {
         List<SimplePerson> people = [];
@@ -87,10 +91,14 @@ class _WaitApprovee extends State<WaitApprovee> {
             peopleA, u["message"], u["status"]);
 
         waitApproves.add(waitApprove);
+        peoplePro = people.length;
+        peopleAgainst = peopleA.length;
       }
       if (this.mounted) {
         setState(() {
           waitApprove = waitApproves;
+          countApprove = peoplePro;
+          countAgainst = peopleAgainst;
         });
       }
       return true;
@@ -193,17 +201,51 @@ class _WaitApprovee extends State<WaitApprovee> {
                       itemBuilder: (BuildContext context, int marcaIndex) {
                         return Dismissible(
                           key: ObjectKey(waitApprove[marcaIndex]),
-                          child: ListTile(
-                              title:
-                                  Text(waitApprove[marcaIndex].essencia.nome),
-                              onTap: () {
-                                _showMaterialDialog(marcaIndex);
-                              }),
+                          child: Row(children: <Widget>[
+                            Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Text(countApprove.toString()),
+                            )),
+                            Flexible(
+                              child: IconButton(
+                                icon: Icon(Icons.thumb_up, color: Colors.green),
+                                onPressed: () {
+                                  approveDeny(marcaIndex, true);
+                                  getWaitApprove(true);
+                                },
+                              ),
+                            ),
+                            Expanded(flex:5,
+                              child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: ListTile(
+                                  title: Text(
+                                      waitApprove[marcaIndex].essencia.nome,
+                                       textAlign: TextAlign.center,),
+                                  onTap: () {
+                                    _showMaterialDialog(marcaIndex);
+                                  }),
+                              )
+                            ),
+                            Flexible(
+                              child: IconButton(
+                                icon: Icon(Icons.thumb_down, color: Colors.red),
+                                onPressed: () {
+                                  approveDeny(marcaIndex, false);
+                                  getWaitApprove(true);
+                                },
+                              ),
+                            ),
+                            Flexible(child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text(countAgainst.toString()),
+                            )),
+                          ]),
                           onDismissed: (direction) {
                             if (direction == DismissDirection.endToStart) {
                               approveDeny(marcaIndex, false);
                               getWaitApprove(true);
-                              print("reprovou");
                             } else {
                               approveDeny(marcaIndex, true);
                               getWaitApprove(true);

@@ -65,3 +65,11 @@ class SimplePerson {
   SimplePerson(this.id, this.name, this.email);
   
 }
+
+class IdNamePerson {
+  final int id;
+  final String name;
+
+  IdNamePerson(this.id, this.name);
+  
+}

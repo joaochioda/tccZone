@@ -40,6 +40,7 @@ class _Favoritas extends State<Favoritas> {
         });
       }
     }
+
     return true;
   }
 
@@ -50,7 +51,7 @@ class _Favoritas extends State<Favoritas> {
           return AlertDialog(
             content: Container(
                 width: 300,
-                height: 300,
+                height: 400,
                 child: Column(
                   children: <Widget>[
                     Padding(
@@ -129,8 +130,8 @@ class _Favoritas extends State<Favoritas> {
                             direction: DismissDirection.endToStart,
                             key: ObjectKey(essenciaG[index]),
                             child: ListTile(
-                              title: Text(essenciaG[0].gosto),
-                              subtitle: Text(essenciaG[0].marca.marca),
+                              title: Text(essenciaG[index].nome),
+                              subtitle: Text(essenciaG[index].marca.marca),
                               onTap: () {
                                 _showMaterialDialog(index);
                               },
