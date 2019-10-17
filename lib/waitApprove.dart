@@ -97,8 +97,6 @@ class _WaitApprovee extends State<WaitApprovee> {
       if (this.mounted) {
         setState(() {
           waitApprove = waitApproves;
-          countApprove = peoplePro;
-          countAgainst = peopleAgainst;
         });
       }
       return true;
@@ -115,6 +113,15 @@ class _WaitApprovee extends State<WaitApprovee> {
       return "Ninguém por enquanto";
     }
     return result;
+  }
+
+  getVoted(String type,int index) {
+    if (type == "up") {
+      return waitApprove[index].peoplePro.length.toString();
+    }
+    else {
+      return waitApprove[index].peopleAgainst.length.toString();
+    }
   }
 
   void _showMaterialDialog(int marcaIndex) {
@@ -205,7 +212,7 @@ class _WaitApprovee extends State<WaitApprovee> {
                             Flexible(
                             child: Padding(
                               padding: EdgeInsets.all(20.0),
-                              child: Text(countApprove.toString()),
+                              child: Text(getVoted("up", marcaIndex)),
                             )),
                             Flexible(
                               child: IconButton(
@@ -239,7 +246,7 @@ class _WaitApprovee extends State<WaitApprovee> {
                             ),
                             Flexible(child: Padding(
                               padding: EdgeInsets.all(10.0),
-                              child: Text(countAgainst.toString()),
+                              child: Text(getVoted("down",marcaIndex)),
                             )),
                           ]),
                           onDismissed: (direction) {
@@ -249,7 +256,6 @@ class _WaitApprovee extends State<WaitApprovee> {
                             } else {
                               approveDeny(marcaIndex, true);
                               getWaitApprove(true);
-                              print("aprovou");
                             }
                           },
                           background: slideRightBackground(),
