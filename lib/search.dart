@@ -61,7 +61,7 @@ class _MySearchPageState extends State<MySearchPage> {
               padding: EdgeInsets.all(40.0),
               child: ListTile(
                 title: Text(
-                    'Clique aqui \nPara ver mais detalhes da "${essencia.gosto}"'),
+                    'Clique aqui \nPara ver mais detalhes da "${essencia.nome}"'),
                 onTap: () {
                   Navigator.of(context).push(
                       MaterialPageRoute<Null>(builder: (BuildContext context) {
@@ -88,7 +88,7 @@ class _MySearchPageState extends State<MySearchPage> {
       List<Marca> marca = [];
 
       for (var u in jsonData) {
-        Marca marc = Marca(u["marca"][0]["id"], u["marca"][0]["marca"]);
+        Marca marc = Marca(u["marca"]["id"], u["marca"]["marca"]);
 
         Essencia user = Essencia(u["id"], marc, u["gosto"], u["sabor"],
             u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"]);
@@ -116,8 +116,6 @@ class _MySearchPageState extends State<MySearchPage> {
 
   addFavorite(int j, int l) async {
     Essencia essencia = getTapped(j, l);
-print(essencia.nome);
-print(essencia.id);
 
 var url =
         'https://pure-scrubland-45679.herokuapp.com/person/${idMe}/essencia';
@@ -208,7 +206,7 @@ var url =
                                     itemBuilder: (context, index) {
                                       return Dismissible(
                                         direction: DismissDirection.endToStart,
-                                        key: ObjectKey(essenciaG[marcaIndex-1]),
+                                        key: ObjectKey(essenciaG[marcaIndex]),
                                         child: ListTile(
                                           title: Text(
                                               getEssencia(marcaIndex, index)),

@@ -20,7 +20,7 @@ class _Favoritas extends State<Favoritas> {
     var jsonData = json.decode(data.body);
     List<Essencia> essenciaList = [];
     for (var u in jsonData["essencias"]) {
-      Marca marc = Marca(u["marca"][0]["id"], u["marca"][0]["marca"]);
+      Marca marc = Marca(u["marca"]["id"], u["marca"]["marca"]);
       Essencia essencia = Essencia(u["id"], marc, u["gosto"], u["sabor"],
           u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"]);
       essenciaList.add(essencia);
