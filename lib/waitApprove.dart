@@ -72,8 +72,8 @@ class _WaitApprovee extends State<WaitApprovee> {
 
         SimplePerson owner = SimplePerson(
             u["owner"]["id"], u["owner"]["name"], u["owner"]["email"]);
-        Marca marca = Marca(u["essencia"]["marca"][0]["id"],
-            u["essencia"]["marca"][0]["marca"]);
+        Marca marca = Marca(u["essencia"]["marca"]["id"],
+            u["essencia"]["marca"]["marca"],null);
 
         Essencia essencia = Essencia(
           u["essencia"]["id"],
@@ -84,6 +84,7 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essencia"]["reputacao"],
           u["essencia"]["status"],
           u["essencia"]["nome"],
+          u["essencia"]["image"],
           u["essencia"]["proposta"],
         );
 

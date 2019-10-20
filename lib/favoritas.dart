@@ -20,22 +20,25 @@ class _Favoritas extends State<Favoritas> {
     var jsonData = json.decode(data.body);
     List<Essencia> essenciaList = [];
     for (var u in jsonData["essencias"]) {
-      Marca marc = Marca(u["marca"]["id"], u["marca"]["marca"]);
+      Marca marc = Marca(u["marca"]["id"], u["marca"]["marca"],u["marca"]["image"]);
       Essencia essencia = Essencia(u["id"], marc, u["gosto"], u["sabor"],
-          u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"]);
+          u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"],u["image"]);
       essenciaList.add(essencia);
     }
 
     if (essenciaList.length > 0 && essenciaG.length == 0) {
       if (this.mounted) {
         setState(() {
+          essenciaList.sort((a,b) => a.marca.marca.toString().toLowerCase().compareTo(b.marca.marca.toString().toLowerCase()));
           essenciaG = essenciaList;
+
         });
       }
     }
     if (essenciaG.length != essenciaList.length) {
       if (this.mounted) {
         setState(() {
+          essenciaList.sort((a,b) => a.marca.marca.toString().toLowerCase().compareTo(b.marca.marca.toString().toLowerCase()));
           essenciaG = essenciaList;
         });
       }
@@ -124,12 +127,15 @@ class _Favoritas extends State<Favoritas> {
                     return Container(child: Center(child: Text("Loading...")));
                   } else {
                     return ListView.builder(
+                       padding: const EdgeInsets.all(15.0),
                         itemCount: essenciaG.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Dismissible(
-                            direction: DismissDirection.endToStart,
                             key: ObjectKey(essenciaG[index]),
                             child: ListTile(
+                               leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(essenciaG[index].marca.image,)
+                                  ),
                               title: Text(essenciaG[index].nome),
                               subtitle: Text(essenciaG[index].marca.marca),
                               onTap: () {
@@ -139,8 +145,14 @@ class _Favoritas extends State<Favoritas> {
                             onDismissed: (direction) {
                               removeEssencia(index);
                             },
-                            background: Container(color: Colors.red),
+                            background: Container(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Icon(Icons.delete),
+                              color: Colors.red,
+                              alignment: Alignment.centerLeft,
+                            ),
                             secondaryBackground: Container(
+                              padding: const EdgeInsets.all(15.0),
                               child: Icon(Icons.delete),
                               color: Colors.red,
                               alignment: Alignment.centerRight,

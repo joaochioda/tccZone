@@ -124,7 +124,7 @@ class _Register extends State<Register> {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
-        title: new Text("Queretemos te conhecer"),
+        title: new Text("Queremos te conhecer"),
       ),
       body: Container(
         child: FutureBuilder(

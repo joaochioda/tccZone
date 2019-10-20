@@ -59,18 +59,27 @@ class _MySearchPageState extends State<MySearchPage> {
         builder: (builder) {
           return Container(
               padding: EdgeInsets.all(40.0),
-              child: ListTile(
-                title: Text(
-                    'Clique aqui \nPara ver mais detalhes da "${essencia.nome}"'),
-                onTap: () {
+              child: Row(children: <Widget>[
+                Flexible(
+                  child: new Container(
+                    child: new Image.network(essencia.image, height: 80,),
+
+                  ),),
+                  Flexible(child: ListTile(
+                    title: Text('Clique aqui Para ver mais detalhes da "${essencia.nome}"'),
+                     onTap: () {
                   Navigator.of(context).push(
                       MaterialPageRoute<Null>(builder: (BuildContext context) {
                     return new DetailsEssencia(
                       essencia: essencia,
                     );
-                  }));
-                },
-              ));
+                  }
+                      )
+                  );
+                     }
+                  ),)
+              ],)
+              );
         });
   }
 
@@ -88,10 +97,10 @@ class _MySearchPageState extends State<MySearchPage> {
       List<Marca> marca = [];
 
       for (var u in jsonData) {
-        Marca marc = Marca(u["marca"]["id"], u["marca"]["marca"]);
+        Marca marc = Marca(u["marca"]["id"], u["marca"]["marca"],u["marca"]["image"]);
 
         Essencia user = Essencia(u["id"], marc, u["gosto"], u["sabor"],
-            u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"]);
+            u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"],u["image"]);
 
         if (user.status == "CREATED") {
           users.add(user);
@@ -99,7 +108,7 @@ class _MySearchPageState extends State<MySearchPage> {
       }
 
       for (var u in jsonData1) {
-        Marca marc = Marca(u["id"], u["marca"]);
+        Marca marc = Marca(u["id"], u["marca"],u["image"]);
         marca.add(marc);
       }
       if (this.mounted) {
@@ -167,7 +176,6 @@ var url =
   Widget build(BuildContext context) {
     _getUsers(true, first);
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
         title: new Text("           Essências aprovadas"),
         actions: <Widget>[
@@ -198,6 +206,9 @@ var url =
                             return Container(
                               child: ExpansionTile(
                                 title: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(marcaG[marcaIndex].image,)
+                                  ),
                                   title: Text(marcaG[marcaIndex].marca),
                                 ),
                                 children: <Widget>[
@@ -205,7 +216,6 @@ var url =
                                     itemCount: getWidth(marcaIndex),
                                     itemBuilder: (context, index) {
                                       return Dismissible(
-                                        direction: DismissDirection.endToStart,
                                         key: ObjectKey(essenciaG[marcaIndex]),
                                         child: ListTile(
                                           title: Text(
@@ -217,9 +227,14 @@ var url =
                                           addFavorite(marcaIndex, index);
                                           _getUsers(true,true);
                                         },
-                                        background:
-                                            Container(color: Colors.red),
+                                        background:Container(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Icon(Icons.star),
+                                          color: Colors.yellow,
+                                          alignment: Alignment.centerLeft
+                                        ),
                                         secondaryBackground: Container(
+                                          padding: const EdgeInsets.all(15.0),
                                           child: Icon(Icons.star),
                                           color: Colors.yellow,
                                           alignment: Alignment.centerRight,

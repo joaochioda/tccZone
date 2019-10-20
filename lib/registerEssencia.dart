@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'entities.dart';
 import 'sign_in.dart';
+import 'home.dart';
 
 class RegisterEssencia extends StatefulWidget {
   RegisterEssencia({Key key}) : super(key: key);
@@ -38,12 +39,12 @@ class _RegisterEssencia extends State<RegisterEssencia> {
       "comentario": comentario,
       "nome": nome,
       "proposta": proposta,
-      "marca": [
+      "marca": 
         {
           "id": _selectedCompanyEstado.id,
           "marca": _selectedCompanyEstado.marca,
         }
-      ]
+      
     };
     var body = json.encode(data);
 
@@ -51,9 +52,8 @@ class _RegisterEssencia extends State<RegisterEssencia> {
         headers: {"Content-Type": "application/json"}, body: body);
 
     var jsonData = json.decode(response.body);
-
     Marca marc =
-        Marca(jsonData["marca"][0]["id"], jsonData["marca"][0]["marca"]);
+        Marca(jsonData["marca"]["id"], jsonData["marca"]["marca"],null);
     Essencia essencia = Essencia(
         jsonData["id"],
         marc,
@@ -62,20 +62,9 @@ class _RegisterEssencia extends State<RegisterEssencia> {
         jsonData["comentario"],
         jsonData["reputacao"],
         jsonData["nome"],
+        jsonData["image"],
         jsonData["proposta"],
         jsonData["status"]);
-
-var url3 = 'https://pure-scrubland-45679.herokuapp.com/me';
-    Map data3 = {
-      "token": token,
-      "email": email
-    };
-
-    var body3 = json.encode(data3);
-    var response3 = await http.post(url3,
-        headers: {"Content-Type": "application/json"}, body: body3);
-
-    String idMee = response3.body;
 
     Map data1 = {
       "essencia": {
@@ -85,20 +74,21 @@ var url3 = 'https://pure-scrubland-45679.herokuapp.com/me';
         "comentario": essencia.comentario,
         "nome": essencia.nome,
         "proposta": essencia.proposta,
-        "marca": [
+        "marca": 
           {
             "id": essencia.marca.id,
             "marca": essencia.marca.marca,
-          }
-        ]
+          },
+        "image": null
+        
       },
       "owner": {
-        "id":idMee,
+        "id":idMe,
         }
     };
 
-
     var body1 = json.encode(data1);
+
     var url1 = 'https://pure-scrubland-45679.herokuapp.com/waitapprove';
 
     await http.post(url1,

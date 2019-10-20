@@ -20,16 +20,20 @@ class Essencia {
   final String status;
   final String nome;
   final String proposta;
+  final String image;
 
   Essencia(this.id, this.marca, this.gosto, this.sabor, this.comentario,
-      this.reputacao, this.status, this.nome, this.proposta);
+      this.reputacao, this.status, this.nome, this.proposta, this.image);
+
 }
+
 
 class Marca {
   final int id;
   final String marca;
+  final String image;
 
-  Marca(this.id, this.marca);
+  Marca(this.id, this.marca, this.image);
 }
 
 class WaitApprove {
