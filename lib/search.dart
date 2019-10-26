@@ -89,6 +89,7 @@ class _MySearchPageState extends State<MySearchPage> {
       var data =
           await http.get("https://pure-scrubland-45679.herokuapp.com/essencia");
 
+      print(data.statusCode);
       var data1 =
           await http.get("https://pure-scrubland-45679.herokuapp.com/marca");
       var jsonData = json.decode(data.body);

@@ -47,8 +47,6 @@ class _Home extends State<Home> {
 
       var jsonData = json.decode(response.body);
       IdNamePerson pe = IdNamePerson(jsonData["id"],jsonData["name"]);
-      print(pe.name);
-      print(pe.id);
 
       if (idMe != pe.id) {
         setState(() {

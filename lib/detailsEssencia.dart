@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'entities.dart';
+import 'editEssencia.dart';
 
 class DetailsEssencia extends StatefulWidget {
   final Essencia essencia;
@@ -20,12 +21,31 @@ class _DetailsEssencia extends State<DetailsEssencia> {
       resizeToAvoidBottomInset: false,
       appBar: new AppBar(
         title: new Text("Detalhes da essencia"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute<Null>(builder: (BuildContext context) {
+                return new EditEssencia(
+                  essencia: essencia,
+                );
+              }));
+            },
+          )
+        ],
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(8, 2, 0, 0),
         child: Container(
           child: ListView(
-            children: <Widget>[                    
+            children: <Widget>[
+              ListTile(
+                title: Text("Nome: ${essencia.nome}"),
+              ),
+              ListTile(
+                title: Text("Marca: ${essencia.marca.marca}"),
+              ),                    
               ListTile(
                 title: Text("Sabor: ${essencia.sabor}"),
               ),
@@ -33,7 +53,7 @@ class _DetailsEssencia extends State<DetailsEssencia> {
                 title: Text("Gosto: ${essencia.gosto}"),
               ),
               ListTile(
-                title: Text("Marca: ${essencia.marca.marca}"),
+                title: Text("Proposta: ${essencia.proposta}"),
               ),
               ListTile(
                 title: Text("Reputação: ${essencia.reputacao}"),

@@ -3,7 +3,6 @@ import 'search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'entities.dart';
-import 'sign_in.dart';
 import 'home.dart';
 
 class RegisterEssencia extends StatefulWidget {
