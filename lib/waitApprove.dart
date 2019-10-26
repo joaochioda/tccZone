@@ -16,6 +16,7 @@ class _WaitApprovee extends State<WaitApprovee> {
   List<WaitApprove> waitApprove;
   int countApprove;
   int countAgainst;
+  bool edit=false;
   approveDeny(id, type) async {
     String typ;
     if (type == true) {
@@ -191,10 +192,40 @@ class _WaitApprovee extends State<WaitApprovee> {
 
   @override
   Widget build(BuildContext ctxt) {
+    if(edit==true) {
+
+       return new Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: new AppBar(
+        title: new Text("Aprovar edição"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.compare_arrows),
+             onPressed: () {
+               setState(() {
+                 edit = false;
+               });
+      },
+          )
+        ],
+      ),
+       );
+
+    } else {
     return new Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: new AppBar(
         title: new Text("Aprovar essências"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.compare_arrows),
+             onPressed: () {
+               setState(() {
+                 edit = true;
+               });
+      },
+          )
+        ],
       ),
       body: Container(
           child: FutureBuilder(
@@ -325,4 +356,5 @@ Widget slideLeftBackground() {
       alignment: Alignment.centerRight,
     ),
   );
+}
 }
