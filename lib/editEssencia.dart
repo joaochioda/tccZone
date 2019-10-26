@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'entities.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'home.dart';
+import 'package:toast/toast.dart';
 
 class EditEssencia extends StatefulWidget {
   final Essencia essencia;
@@ -21,15 +25,40 @@ class _EditEssenciaState extends State<EditEssencia> {
   Essencia essencia;
   _EditEssenciaState(this.essencia);
 
- Submit() {
+  Submit() {
     if (_formKey.currentState.validate()) {
-      registerEssencia();
+       registerEssencia();
       return true;
     }
   }
 
-  registerEssencia() {
-    print("oi");
+  registerEssencia() async {
+    var url = 'https://pure-scrubland-45679.herokuapp.com/editapprove';
+    Map data = {
+      "essenciaAntiga": {"id": essencia.id},
+      "essenciaNova": {
+        "gosto": gosto,
+        "sabor": sabor,
+        "comentario": comentario,
+        "nome": nome,
+        "proposta": proposta,
+        "marca": {
+          "id": essencia.marca.id,
+          "marca": essencia.marca.marca,
+        }
+      },
+      "owner": {
+        "id": idMe,
+      }
+    };
+
+    var body = json.encode(data);
+    var response = await http.post(url,
+        headers: {"Content-Type": "application/json"}, body: body);
+    
+    // if(response.statusCode == 200) {
+    //   Toast.show("Toast plugin app", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+    // }
   }
 
   @override
@@ -44,81 +73,82 @@ class _EditEssenciaState extends State<EditEssencia> {
             child: Form(
               key: _formKey,
               child: Column(
-              children: <Widget>[
-                TextFormField(
-                  initialValue: essencia.nome,
-                  decoration: InputDecoration(labelText: "Nome"),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Por favor preencha o campo";
-                    }
-                    nome = value;
-                  },
-                  onSaved: (value) => nome = value,
-                ),
-                 TextFormField(
-                  initialValue: essencia.gosto,
-                  decoration: InputDecoration(labelText: "Gosto"),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Por favor preencha o campo";
-                    }
-                    gosto = value;
-                  },
-                  onSaved: (value) => gosto = value,
-                ),
-                TextFormField(
-                  initialValue: essencia.sabor,
-                  decoration: InputDecoration(labelText: "Sabor"),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Por favor preencha o campo";
-                    }
-                    sabor = value;
-                  },
-                  onSaved: (value) => sabor = value,
-                ),
-                TextFormField(
-                  initialValue: essencia.comentario,
-                  decoration: InputDecoration(labelText: "Comentário"),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Por favor preencha o campo";
-                    }
-                    comentario = value;
-                  },
-                   onSaved: (value) => comentario = value,
-                ),
-                TextFormField(
-                  initialValue: essencia.proposta,
-                  decoration: InputDecoration(labelText: "Proposta"),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Por favor preencha o campo";
-                    }
-                    proposta = value;
-                  },
-                   onSaved: (value) => proposta = value,
-                ),
-                Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      if (Submit() == true) {
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: Text("Registrar essência"),
-                                  ),
-                                )
-                              ],
-                            ),
-              ],
-            ),
-            )
-            ));
+                children: <Widget>[
+                  TextFormField(
+                    initialValue: essencia.nome,
+                    decoration: InputDecoration(labelText: "Nome"),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Por favor preencha o campo";
+                      }
+                      nome = value;
+                    },
+                    onSaved: (value) => nome = value,
+                  ),
+                  TextFormField(
+                    initialValue: essencia.gosto,
+                    decoration: InputDecoration(labelText: "Gosto"),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Por favor preencha o campo";
+                      }
+                      gosto = value;
+                    },
+                    onSaved: (value) => gosto = value,
+                  ),
+                  TextFormField(
+                    initialValue: essencia.sabor,
+                    decoration: InputDecoration(labelText: "Sabor"),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Por favor preencha o campo";
+                      }
+                      sabor = value;
+                    },
+                    onSaved: (value) => sabor = value,
+                  ),
+                  TextFormField(
+                    initialValue: essencia.comentario,
+                    decoration: InputDecoration(labelText: "Comentário"),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Por favor preencha o campo";
+                      }
+                      comentario = value;
+                    },
+                    onSaved: (value) => comentario = value,
+                  ),
+                  TextFormField(
+                    initialValue: essencia.proposta,
+                    decoration: InputDecoration(labelText: "Proposta"),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Por favor preencha o campo";
+                      }
+                      proposta = value;
+                    },
+                    onSaved: (value) => proposta = value,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            if (Submit() == true) {
+                               Navigator.pop(context, "Edição criada ! Esperando aprovação dos membros");
+                            }
+                          },
+                          child: Text("Propor edição da essência"),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )));
   }
+
+
 }

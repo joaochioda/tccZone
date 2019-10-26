@@ -15,6 +15,22 @@ class _DetailsEssencia extends State<DetailsEssencia> {
   Essencia essencia;
   _DetailsEssencia(this.essencia);
 
+ _navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditEssencia(essencia: essencia,)),
+    );
+
+  if(result != null){
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text("$result")));
+  }
+  }
+
+
   @override
   Widget build(BuildContext ctxt) {
     return new Scaffold(
@@ -24,14 +40,9 @@ class _DetailsEssencia extends State<DetailsEssencia> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute<Null>(builder: (BuildContext context) {
-                return new EditEssencia(
-                  essencia: essencia,
-                );
-              }));
-            },
+             onPressed: () {
+        _navigateAndDisplaySelection(context);
+      },
           )
         ],
       ),
