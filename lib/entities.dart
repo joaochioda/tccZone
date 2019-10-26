@@ -12,10 +12,10 @@ class Cidade {
 
 class Essencia {
   final int id;
-  final String gosto;
-  final String sabor;
   final Marca marca;
+  final String gosto;
   final String comentario;
+  final String sabor;
   final int reputacao;
   final String status;
   final String nome;
@@ -46,6 +46,17 @@ class WaitApprove {
   final String status;
 
   WaitApprove(this.id,this.essencia, this.owner, this.peoplePro, this.peopleAgainst, this.message, this.status);
+}
+
+class EditApprove {
+  final int id;
+  final Essencia essenciaNova;
+  final Essencia essenciaAntiga;
+  final SimplePerson owner;
+  final List<SimplePerson> peoplePro;
+  final List<SimplePerson> peopleAgainst;
+
+  EditApprove(this.id,this.essenciaNova,this.essenciaAntiga ,this.owner, this.peoplePro, this.peopleAgainst);
 }
 
 class Person {

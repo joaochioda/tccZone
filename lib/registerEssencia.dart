@@ -147,6 +147,16 @@ class _RegisterEssencia extends State<RegisterEssencia> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             TextFormField(
+                              decoration:
+                                  InputDecoration(labelText: "Nome"),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Por favor preencha o campo";
+                                }
+                                nome = value;
+                              },
+                            ),
+                            TextFormField(
                               decoration: InputDecoration(labelText: "Gosto"),
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -176,16 +186,7 @@ class _RegisterEssencia extends State<RegisterEssencia> {
                                 comentario = value;
                               },
                             ),
-                             TextFormField(
-                              decoration:
-                                  InputDecoration(labelText: "Nome"),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Por favor preencha o campo";
-                                }
-                                nome = value;
-                              },
-                            ),
+                             
                              TextFormField(
                               decoration:
                                   InputDecoration(labelText: "Proposta"),

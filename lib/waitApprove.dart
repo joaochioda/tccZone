@@ -14,9 +14,11 @@ class WaitApprovee extends StatefulWidget {
 
 class _WaitApprovee extends State<WaitApprovee> {
   List<WaitApprove> waitApprove;
+  List<EditApprove> editApprove;
   int countApprove;
   int countAgainst;
-  bool edit=false;
+  bool edit = false;
+
   approveDeny(id, type) async {
     String typ;
     if (type == true) {
@@ -40,6 +42,34 @@ class _WaitApprovee extends State<WaitApprovee> {
         },
         "String": "",
       };
+      var body = json.encode(data);
+
+      await http.post(url,
+          headers: {"Content-Type": "application/json"}, body: body);
+    }
+  }
+
+  editApproveDeny(id, type) async {
+    String typ;
+    if (type == true) {
+      typ = "approve";
+      var url =
+          ("https://pure-scrubland-45679.herokuapp.com/editapprove/${editApprove[id].id}/${typ}");
+      Map data = {
+        "id": idMe,
+      };
+      var body = json.encode(data);
+
+      await http.post(url,
+          headers: {"Content-Type": "application/json"}, body: body);
+    } else {
+      typ = "deny";
+      var url =
+          ("https://pure-scrubland-45679.herokuapp.com/editapprove/${editApprove[id].id}/${typ}");
+      Map data = {
+        "id": idMe,
+      };
+
       var body = json.encode(data);
 
       await http.post(url,
@@ -74,7 +104,7 @@ class _WaitApprovee extends State<WaitApprovee> {
         SimplePerson owner = SimplePerson(
             u["owner"]["id"], u["owner"]["name"], u["owner"]["email"]);
         Marca marca = Marca(u["essencia"]["marca"]["id"],
-            u["essencia"]["marca"]["marca"],null);
+            u["essencia"]["marca"]["marca"], null);
 
         Essencia essencia = Essencia(
           u["essencia"]["id"],
@@ -85,8 +115,8 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essencia"]["reputacao"],
           u["essencia"]["status"],
           u["essencia"]["nome"],
-          u["essencia"]["image"],
           u["essencia"]["proposta"],
+          u["essencia"]["image"],
         );
 
         WaitApprove waitApprove = WaitApprove(u["id"], essencia, owner, people,
@@ -106,6 +136,80 @@ class _WaitApprovee extends State<WaitApprovee> {
     return true;
   }
 
+  getEditApprove(reload) async {
+    if (editApprove == null || reload == true) {
+      var data = await http
+          .get("https://pure-scrubland-45679.herokuapp.com/editapprove");
+      var jsonData = json.decode(data.body);
+      Person person;
+      int peoplePro;
+      int peopleAgainst;
+      List<EditApprove> editApprovess = [];
+      for (var u in jsonData) {
+        List<SimplePerson> people = [];
+
+        for (var j in u["peoplePro"]) {
+          SimplePerson po = SimplePerson(j["id"], j["name"], j["email"]);
+          people.add(po);
+        }
+
+        List<SimplePerson> peopleA = [];
+
+        for (var k in u["peopleAgainst"]) {
+          SimplePerson po = SimplePerson(k["id"], k["name"], k["email"]);
+          peopleA.add(po);
+        }
+
+        SimplePerson owner = SimplePerson(
+            u["owner"]["id"], u["owner"]["name"], u["owner"]["email"]);
+
+        Marca marca = Marca(u["essenciaAntiga"]["marca"]["id"],
+            u["essenciaAntiga"]["marca"]["marca"], null);
+
+        Essencia essenciaAntiga = Essencia(
+          u["essenciaAntiga"]["id"],
+          marca,
+          u["essenciaAntiga"]["gosto"],
+          u["essenciaAntiga"]["sabor"],
+          u["essenciaAntiga"]["comentario"],
+          u["essenciaAntiga"]["reputacao"],
+          u["essenciaAntiga"]["status"],
+          u["essenciaAntiga"]["nome"],
+          u["essenciaAntiga"]["proposta"],
+          u["essenciaAntiga"]["image"],
+        );
+
+        Essencia essenciaNova = Essencia(
+          u["essenciaNova"]["id"],
+          marca,
+          u["essenciaNova"]["gosto"],
+          u["essenciaNova"]["sabor"],
+          u["essenciaNova"]["comentario"],
+          u["essenciaNova"]["reputacao"],
+          u["essenciaNova"]["status"],
+          u["essenciaNova"]["nome"],
+          u["essenciaNova"]["proposta"],
+          u["essenciaNova"]["image"],
+        );
+
+        EditApprove editApproves = EditApprove(
+            u["id"], essenciaNova, essenciaAntiga, owner, people, peopleA);
+
+        editApprovess.add(editApproves);
+        peoplePro = people.length;
+        peopleAgainst = peopleA.length;
+      }
+
+      if (this.mounted) {
+        setState(() {
+          editApprove = editApprovess;
+        });
+      }
+      return true;
+    }
+    return true;
+  }
+
   getNames(int index) {
     String result = '';
     for (var n in waitApprove[index].peoplePro) {
@@ -117,12 +221,19 @@ class _WaitApprovee extends State<WaitApprovee> {
     return result;
   }
 
-  getVoted(String type,int index) {
-    if (type == "up") {
-      return waitApprove[index].peoplePro.length.toString();
-    }
-    else {
-      return waitApprove[index].peopleAgainst.length.toString();
+  getVoted(String type, int index) {
+    if (edit == false) {
+      if (type == "up") {
+        return waitApprove[index].peoplePro.length.toString();
+      } else {
+        return waitApprove[index].peopleAgainst.length.toString();
+      }
+    } else {
+      if (type == "up") {
+        return editApprove[index].peoplePro.length.toString();
+      } else {
+        return editApprove[index].peopleAgainst.length.toString();
+      }
     }
   }
 
@@ -190,171 +301,337 @@ class _WaitApprovee extends State<WaitApprovee> {
         });
   }
 
+  void showDifferenceDialog(int marcaIndex) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+            content: Container(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.all(1.0),
+                        child: Column(
+                          children: <Widget>[
+                            Text("Nome:", style: TextStyle(fontStyle: FontStyle.italic),),
+                            Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Text(
+                                  "${editApprove[marcaIndex].essenciaAntiga.nome} --> ${editApprove[marcaIndex].essenciaNova.nome}",
+                                  style: new TextStyle(
+                                    fontSize: 12,
+                                  ),),
+                            ),
+                             Text("Gosto:", style: TextStyle(fontStyle: FontStyle.italic),),
+                            Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Text(
+                                  "${editApprove[marcaIndex].essenciaAntiga.gosto} --> ${editApprove[marcaIndex].essenciaNova.gosto}",
+                                  style: new TextStyle(
+                                    fontSize: 12,
+                                  ),),
+                            ),
+                             Text("Sabor:", style: TextStyle(fontStyle: FontStyle.italic),),
+                            Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Text(
+                                  "${editApprove[marcaIndex].essenciaAntiga.sabor} --> ${editApprove[marcaIndex].essenciaNova.sabor}",
+                                  style: new TextStyle(
+                                    fontSize: 12,
+                                  ),),
+                            ),
+                            
+                             Text("Proposta:", style: TextStyle(fontStyle: FontStyle.italic),),
+                            Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Text(
+                                  "${editApprove[marcaIndex].essenciaAntiga.proposta} --> ${editApprove[marcaIndex].essenciaNova.proposta}",
+                                  style: new TextStyle(
+                                    fontSize: 12,
+                                  ),),
+                            ),
+
+                             Text("Comentário:", style: TextStyle(fontStyle: FontStyle.italic),),
+                            Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Text(
+                                  "${editApprove[marcaIndex].essenciaAntiga.comentario} --> ${editApprove[marcaIndex].essenciaNova.comentario}",
+                                  style: new TextStyle(
+                                    fontSize: 12,
+                                  ),),
+                            ),
+
+                             Text("Dono da edição:", style: TextStyle(fontStyle: FontStyle.italic),),
+                            Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Text(
+                                  "${editApprove[marcaIndex].owner.name}",
+                                  style: new TextStyle(
+                                    fontSize: 12,
+                                  ),),
+                            ),
+                        
+                          ],
+                        )),
+
+                    
+                    RaisedButton(
+                      padding: const EdgeInsets.all(12.0),
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      onPressed: () =>
+                          Navigator.of(context, rootNavigator: true).pop(),
+                      child: new Text("Fechar"),
+                    )
+                  ],
+                )),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext ctxt) {
-    if(edit==true) {
-
-       return new Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: new AppBar(
-        title: new Text("Aprovar edição"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.compare_arrows),
-             onPressed: () {
-               setState(() {
-                 edit = false;
-               });
-      },
-          )
-        ],
-      ),
-       );
-
+    if (edit == true) {
+      return new Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: new AppBar(
+            title: new Text("Aprovar edição"),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.compare_arrows),
+                onPressed: () {
+                  setState(() {
+                    edit = false;
+                  });
+                },
+              )
+            ],
+          ),
+          body: Container(
+              child: FutureBuilder(
+                  future: getEditApprove(false),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.data == null) {
+                      return Container(
+                          child: Center(child: Text("Loading...")));
+                    } else {
+                      return ListView.builder(
+                          padding: const EdgeInsets.all(15.0),
+                          itemCount:
+                              editApprove == null ? 0 : editApprove.length,
+                          itemBuilder: (BuildContext context, int marcaIndex) {
+                            return Dismissible(
+                              key: ObjectKey(editApprove[marcaIndex]),
+                              child: Row(children: <Widget>[
+                                Flexible(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Text(getVoted("up", marcaIndex)),
+                                )),
+                                Flexible(
+                                  child: IconButton(
+                                    icon: Icon(Icons.thumb_up,
+                                        color: Colors.green),
+                                    onPressed: () {
+                                      editApproveDeny(marcaIndex, true);
+                                      getEditApprove(true);
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                    flex: 5,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10.0),
+                                      child: ListTile(
+                                          title: Text(
+                                            editApprove[marcaIndex]
+                                                .essenciaAntiga
+                                                .nome,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          onTap: () {
+                                            showDifferenceDialog(marcaIndex);
+                                          }),
+                                    )),
+                                Flexible(
+                                  child: IconButton(
+                                    icon: Icon(Icons.thumb_down,
+                                        color: Colors.red),
+                                    onPressed: () {
+                                      editApproveDeny(marcaIndex, false);
+                                      getEditApprove(true);
+                                    },
+                                  ),
+                                ),
+                                Flexible(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(getVoted("down", marcaIndex)),
+                                )),
+                              ]),
+                              onDismissed: (direction) {
+                                if (direction == DismissDirection.endToStart) {
+                                  editApproveDeny(marcaIndex, false);
+                                  getEditApprove(true);
+                                } else {
+                                  editApproveDeny(marcaIndex, true);
+                                  getEditApprove(true);
+                                }
+                              },
+                              background: slideRightBackground(),
+                              secondaryBackground: slideLeftBackground(),
+                            );
+                          });
+                    }
+                  })));
     } else {
-    return new Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: new AppBar(
-        title: new Text("Aprovar essências"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.compare_arrows),
-             onPressed: () {
-               setState(() {
-                 edit = true;
-               });
-      },
-          )
-        ],
-      ),
-      body: Container(
-          child: FutureBuilder(
-              future: getWaitApprove(false),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.data == null) {
-                  return Container(child: Center(child: Text("Loading...")));
-                } else {
-                  return ListView.builder(
-                      padding: const EdgeInsets.all(15.0),
-                      itemCount: waitApprove == null ? 0 : waitApprove.length,
-                      itemBuilder: (BuildContext context, int marcaIndex) {
-                        return Dismissible(
-                          key: ObjectKey(waitApprove[marcaIndex]),
-                          child: Row(children: <Widget>[
-                            Flexible(
-                            child: Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Text(getVoted("up", marcaIndex)),
-                            )),
-                            Flexible(
-                              child: IconButton(
-                                icon: Icon(Icons.thumb_up, color: Colors.green),
-                                onPressed: () {
-                                  approveDeny(marcaIndex, true);
-                                  getWaitApprove(true);
-                                },
+      return new Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: new AppBar(
+          title: new Text("Aprovar essências"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.compare_arrows),
+              onPressed: () {
+                setState(() {
+                  edit = true;
+                });
+              },
+            )
+          ],
+        ),
+        body: Container(
+            child: FutureBuilder(
+                future: getWaitApprove(false),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Container(child: Center(child: Text("Loading...")));
+                  } else {
+                    return ListView.builder(
+                        padding: const EdgeInsets.all(15.0),
+                        itemCount: waitApprove == null ? 0 : waitApprove.length,
+                        itemBuilder: (BuildContext context, int marcaIndex) {
+                          return Dismissible(
+                            key: ObjectKey(waitApprove[marcaIndex]),
+                            child: Row(children: <Widget>[
+                              Flexible(
+                                  child: Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Text(getVoted("up", marcaIndex)),
+                              )),
+                              Flexible(
+                                child: IconButton(
+                                  icon:
+                                      Icon(Icons.thumb_up, color: Colors.green),
+                                  onPressed: () {
+                                    approveDeny(marcaIndex, true);
+                                    getWaitApprove(true);
+                                  },
+                                ),
                               ),
-                            ),
-                            Expanded(flex:5,
-                              child: Padding(
+                              Expanded(
+                                  flex: 5,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: ListTile(
+                                        title: Text(
+                                          waitApprove[marcaIndex].essencia.nome,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        onTap: () {
+                                          _showMaterialDialog(marcaIndex);
+                                        }),
+                                  )),
+                              Flexible(
+                                child: IconButton(
+                                  icon:
+                                      Icon(Icons.thumb_down, color: Colors.red),
+                                  onPressed: () {
+                                    approveDeny(marcaIndex, false);
+                                    getWaitApprove(true);
+                                  },
+                                ),
+                              ),
+                              Flexible(
+                                  child: Padding(
                                 padding: EdgeInsets.all(10.0),
-                                child: ListTile(
-                                  title: Text(
-                                      waitApprove[marcaIndex].essencia.nome,
-                                       textAlign: TextAlign.center,),
-                                  onTap: () {
-                                    _showMaterialDialog(marcaIndex);
-                                  }),
-                              )
-                            ),
-                            Flexible(
-                              child: IconButton(
-                                icon: Icon(Icons.thumb_down, color: Colors.red),
-                                onPressed: () {
-                                  approveDeny(marcaIndex, false);
-                                  getWaitApprove(true);
-                                },
-                              ),
-                            ),
-                            Flexible(child: Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text(getVoted("down",marcaIndex)),
-                            )),
-                          ]),
-                          onDismissed: (direction) {
-                            if (direction == DismissDirection.endToStart) {
-                              approveDeny(marcaIndex, false);
-                              getWaitApprove(true);
-                            } else {
-                              approveDeny(marcaIndex, true);
-                              getWaitApprove(true);
-                            }
-                          },
-                          background: slideRightBackground(),
-                          secondaryBackground: slideLeftBackground(),
-                        );
-                      });
-                }
-              })),
+                                child: Text(getVoted("down", marcaIndex)),
+                              )),
+                            ]),
+                            onDismissed: (direction) {
+                              if (direction == DismissDirection.endToStart) {
+                                approveDeny(marcaIndex, false);
+                                getWaitApprove(true);
+                              } else {
+                                approveDeny(marcaIndex, true);
+                                getWaitApprove(true);
+                              }
+                            },
+                            background: slideRightBackground(),
+                            secondaryBackground: slideLeftBackground(),
+                          );
+                        });
+                  }
+                })),
+      );
+    }
+  }
+
+  Widget slideRightBackground() {
+    return Container(
+      color: Colors.green,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.thumb_up,
+              color: Colors.white,
+            ),
+            Text(
+              " Aprovar",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerLeft,
+      ),
     );
   }
-}
 
-Widget slideRightBackground() {
-  return Container(
-    color: Colors.green,
-    child: Align(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            width: 20,
-          ),
-          Icon(
-            Icons.thumb_up,
-            color: Colors.white,
-          ),
-          Text(
-            " Aprovar",
-            style: TextStyle(
+  Widget slideLeftBackground() {
+    return Container(
+      color: Colors.red,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(
+              Icons.thumb_down,
               color: Colors.white,
-              fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.left,
-          ),
-        ],
-      ),
-      alignment: Alignment.centerLeft,
-    ),
-  );
-}
-
-Widget slideLeftBackground() {
-  return Container(
-    color: Colors.red,
-    child: Align(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Icon(
-            Icons.thumb_down,
-            color: Colors.white,
-          ),
-          Text(
-            " Reprovar",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
+            Text(
+              " Reprovar",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.right,
             ),
-            textAlign: TextAlign.right,
-          ),
-          SizedBox(
-            width: 20,
-          ),
-        ],
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerRight,
       ),
-      alignment: Alignment.centerRight,
-    ),
-  );
-}
+    );
+  }
 }
