@@ -117,6 +117,7 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essencia"]["nome"],
           u["essencia"]["proposta"],
           u["essencia"]["image"],
+          null,
         );
 
         WaitApprove waitApprove = WaitApprove(u["id"], essencia, owner, people,
@@ -177,6 +178,7 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essenciaAntiga"]["nome"],
           u["essenciaAntiga"]["proposta"],
           u["essenciaAntiga"]["image"],
+          null,
         );
 
         Essencia essenciaNova = Essencia(
@@ -190,6 +192,7 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essenciaNova"]["nome"],
           u["essenciaNova"]["proposta"],
           u["essenciaNova"]["image"],
+          null,
         );
 
         EditApprove editApproves = EditApprove(

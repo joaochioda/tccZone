@@ -63,7 +63,8 @@ class _RegisterEssencia extends State<RegisterEssencia> {
         jsonData["nome"],
         jsonData["image"],
         jsonData["proposta"],
-        jsonData["status"]);
+        jsonData["status"],
+        null);
 
     Map data1 = {
       "essencia": {

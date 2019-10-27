@@ -23,7 +23,7 @@ class Points extends StatelessWidget {
             ),
             ListTile(
               title: Text(
-                  "Basta deslizar para a esquerda uma essência ja aprovada"),
+                  "Basta deslizar para a esquerda/direita"),
             ),
             ListTile(
               title: Text(
@@ -43,7 +43,7 @@ class Points extends StatelessWidget {
             ),
             ListTile(
               title: Text(
-                  "Deslizar esquerda = reprovar \nDesligar para direita = aprovar"),
+                  "Deslizar esquerda = reprovar \nDeslizar para direita = aprovar"),
             ),
             ListTile(
               title: Text(
@@ -53,7 +53,7 @@ class Points extends StatelessWidget {
             ),
             ListTile(
               title: Text(
-                  "Ao propor a criação de uma essência e for aceita, o criador recebe 3 pontos e as pessoas que aceitaram recebem 1.\nPara a essência ser aceita são necessários 3 votos (criador não conta)"),
+                  "Ao propor a criação de uma essência/edição e for aceita, o criador recebe 3 pontos e as pessoas que aceitaram recebem 1.\nPara a essência/edição serem aceitas são necessários 3 votos (criador não conta)"),
             ),
             ListTile(
               title: Text(

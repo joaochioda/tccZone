@@ -21,12 +21,24 @@ class Essencia {
   final String nome;
   final String proposta;
   final String image;
+  final List<Message> message;
 
   Essencia(this.id, this.marca, this.gosto, this.sabor, this.comentario,
-      this.reputacao, this.status, this.nome, this.proposta, this.image);
+      this.reputacao, this.status, this.nome, this.proposta, this.image, this.message);
 
 }
 
+class Message {
+  final int id;
+  final String date;
+  final String text;
+  final String nameOwner;
+  final String emailOwner;
+  final int idOwner;
+
+  Message(this.id, this.date, this.text, this.nameOwner, this.emailOwner, this.idOwner);
+
+}
 
 class Marca {
   final int id;

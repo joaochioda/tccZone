@@ -21,7 +21,7 @@ class Search extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'FogZone',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -41,7 +41,7 @@ class MySearchPage extends StatefulWidget {
 
 class _MySearchPageState extends State<MySearchPage> {
   Future<Null> refreshPage() async {
-    _getUsers(true,true);
+    _getUsers(true, true);
   }
 
   Choice _selectedChoice = choices[0];
@@ -59,49 +59,71 @@ class _MySearchPageState extends State<MySearchPage> {
         builder: (builder) {
           return Container(
               padding: EdgeInsets.all(40.0),
-              child: Row(children: <Widget>[
-                Flexible(
-                  child: new Container(
-                    child: new Image.network(essencia.image, height: 80,),
-
-                  ),),
-                  Flexible(child: ListTile(
-                    title: Text('Clique aqui Para ver mais detalhes da "${essencia.nome}"'),
-                     onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute<Null>(builder: (BuildContext context) {
-                    return new DetailsEssencia(
-                      essencia: essencia,
-                    );
-                  }
-                      )
-                  );
-                     }
-                  ),)
-              ],)
-              );
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    child: new Container(
+                      child: new Image.network(
+                        essencia.image,
+                        height: 80,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: ListTile(
+                        title: Text(
+                            'Clique aqui Para ver mais detalhes da "${essencia.nome}"'),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute<Null>(
+                              builder: (BuildContext context) {
+                            return new DetailsEssencia(
+                              essencia: essencia,
+                            );
+                          }));
+                        }),
+                  )
+                ],
+              ));
         });
   }
 
   _getUsers(refresh, firsts) async {
-  
-    if ((refresh==true) && (firsts == true)) {
+    if ((refresh == true) && (firsts == true)) {
       var data =
           await http.get("https://pure-scrubland-45679.herokuapp.com/essencia");
 
-      print(data.statusCode);
       var data1 =
           await http.get("https://pure-scrubland-45679.herokuapp.com/marca");
       var jsonData = json.decode(data.body);
       var jsonData1 = json.decode(data1.body);
       List<Essencia> users = [];
       List<Marca> marca = [];
+      List<Message> message = [];
 
       for (var u in jsonData) {
-        Marca marc = Marca(u["marca"]["id"], u["marca"]["marca"],u["marca"]["image"]);
+       message = [];
+        for (var j in u["message"]) {
+        
+           Message mes = Message(j["id"],j["date"], j["text"],j["nameOwner"],j["emailOwner"],j["idOwner"]);
 
-        Essencia user = Essencia(u["id"], marc, u["gosto"], u["sabor"],
-            u["comentario"], u["reputacao"], u["status"], u["nome"], u["proposta"],u["image"]);
+          message.add(mes);
+        }
+        
+        Marca marc =
+            Marca(u["marca"]["id"], u["marca"]["marca"], u["marca"]["image"]);
+
+        Essencia user = Essencia(
+            u["id"],
+            marc,
+            u["gosto"],
+            u["sabor"],
+            u["comentario"],
+            u["reputacao"],
+            u["status"],
+            u["nome"],
+            u["proposta"],
+            u["image"],
+            message);
 
         if (user.status == "CREATED") {
           users.add(user);
@@ -109,9 +131,10 @@ class _MySearchPageState extends State<MySearchPage> {
       }
 
       for (var u in jsonData1) {
-        Marca marc = Marca(u["id"], u["marca"],u["image"]);
+        Marca marc = Marca(u["id"], u["marca"], u["image"]);
         marca.add(marc);
       }
+
       if (this.mounted) {
         setState(() {
           essenciaG = users;
@@ -126,8 +149,7 @@ class _MySearchPageState extends State<MySearchPage> {
 
   addFavorite(int j, int l) async {
     Essencia essencia = getTapped(j, l);
-
-var url =
+    var url =
         'https://pure-scrubland-45679.herokuapp.com/person/${idMe}/essencia';
     Map data = {
       "id": essencia.id,
@@ -195,7 +217,7 @@ var url =
           onRefresh: refreshPage,
           child: new Container(
               child: FutureBuilder(
-                  future: _getUsers(true,false),
+                  future: _getUsers(true, false),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.data == null) {
                       return Container(
@@ -208,8 +230,9 @@ var url =
                               child: ExpansionTile(
                                 title: ListTile(
                                   leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(marcaG[marcaIndex].image,)
-                                  ),
+                                      backgroundImage: NetworkImage(
+                                    marcaG[marcaIndex].image,
+                                  )),
                                   title: Text(marcaG[marcaIndex].marca),
                                 ),
                                 children: <Widget>[
@@ -226,14 +249,13 @@ var url =
                                         ),
                                         onDismissed: (direction) {
                                           addFavorite(marcaIndex, index);
-                                          _getUsers(true,true);
+                                          _getUsers(true, true);
                                         },
-                                        background:Container(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Icon(Icons.star),
-                                          color: Colors.yellow,
-                                          alignment: Alignment.centerLeft
-                                        ),
+                                        background: Container(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Icon(Icons.star),
+                                            color: Colors.yellow,
+                                            alignment: Alignment.centerLeft),
                                         secondaryBackground: Container(
                                           padding: const EdgeInsets.all(15.0),
                                           child: Icon(Icons.star),
