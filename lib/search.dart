@@ -77,7 +77,7 @@ class _MySearchPageState extends State<MySearchPage> {
                           Navigator.of(context).push(MaterialPageRoute<Null>(
                               builder: (BuildContext context) {
                             return new DetailsEssencia(
-                              essencia: essencia,
+                              essencia: essencia, screen: "search",
                             );
                           }));
                         }),

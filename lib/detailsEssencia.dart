@@ -7,16 +7,17 @@ import 'dart:convert';
 
 class DetailsEssencia extends StatefulWidget {
   final Essencia essencia;
-
-  DetailsEssencia({Key key, @required this.essencia}) : super(key: key);
+  final String screen;
+  DetailsEssencia({Key key, @required this.essencia, @required this.screen}) : super(key: key);
 
   @override
-  _DetailsEssencia createState() => new _DetailsEssencia(essencia);
+  _DetailsEssencia createState() => new _DetailsEssencia(essencia,screen);
 }
 
 class _DetailsEssencia extends State<DetailsEssencia> {
   Essencia essencia;
-  _DetailsEssencia(this.essencia);
+  String screen;
+  _DetailsEssencia(this.essencia,this.screen);
   String text;
   final _formKey = GlobalKey<FormState>();
 
@@ -91,8 +92,12 @@ await http.post(url,
                           padding: const EdgeInsets.all(8.0),
                           child: RaisedButton(
                             onPressed: () {
-                              if (Submit() == true) {
+                              if (Submit() == true && screen == "favorite") {
                                 Navigator.pop(context);
+                              } 
+                              else if(Submit() == true && screen == "search") {
+                                 Navigator.of(context, rootNavigator: true).pop();
+                              
                               }
                             },
                             child: Text("Salvar"),

@@ -129,7 +129,7 @@ class _Favoritas extends State<Favoritas> {
                                     MaterialPageRoute<Null>(
                                         builder: (BuildContext context) {
                                   return new DetailsEssencia(
-                                    essencia: essenciaG[index],
+                                    essencia: essenciaG[index], screen: "favorite",
                                   );
                                 }));
                               }),
