@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'entities.dart';
 import 'home.dart';
 import 'detailsEssencia.dart';
+import './api/getFavorite.dart';
 
 List<Essencia> essenciaG = [];
 List<Message> messageG = [];
@@ -16,65 +17,36 @@ class Favoritas extends StatefulWidget {
 }
 
 class _Favoritas extends State<Favoritas> {
+
   getEssencias() async {
-    var data = await http
-        .get("https://pure-scrubland-45679.herokuapp.com/person/$idMe");
-    var jsonData = json.decode(data.body);
-    List<Essencia> essenciaList = [];
-    List<Message> message = [];
-    List<Message> messageList = [];
 
-    for (var u in jsonData["essencias"]) {
-      message = [];
-      for (var j in u["message"]) {
-        Message mes = Message(j["id"],j["date"], j["text"],j["nameOwner"],j["emailOwner"],j["idOwner"]);
-        message.add(mes);
-        messageList.add(mes);
-      }
+    Favorite favorite = await getFavorite();
 
-
-      Marca marc =
-          Marca(u["marca"]["id"], u["marca"]["marca"], u["marca"]["image"]);
-      Essencia essencia = Essencia(
-          u["id"],
-          marc,
-          u["gosto"],
-          u["sabor"],
-          u["comentario"],
-          u["reputacao"],
-          u["status"],
-          u["nome"],
-          u["proposta"],
-          u["image"],
-          message);
-      essenciaList.add(essencia);
-    }
-
-    if (essenciaList.length > 0 && essenciaG.length == 0 || messageList.length != messageG.length) {
+     if (favorite.essenciaList.length > 0 && essenciaG.length == 0 || favorite.message != messageG) {
       if (this.mounted) {
         setState(() {
-          essenciaList.sort((a, b) => a.marca.marca
+          favorite.essenciaList.sort((a, b) => a.marca.marca
               .toString()
               .toLowerCase()
               .compareTo(b.marca.marca.toString().toLowerCase()));
-          essenciaG = essenciaList;
-          messageG = messageList;
+          essenciaG = favorite.essenciaList;
+          messageG = favorite.message;
         });
       }
     }
-    if (essenciaG.length != essenciaList.length) {
+    if (essenciaG.length != favorite.essenciaList.length) {
       if (this.mounted) {
         setState(() {
-          essenciaList.sort((a, b) => a.marca.marca
+          favorite.essenciaList.sort((a, b) => a.marca.marca
               .toString()
               .toLowerCase()
               .compareTo(b.marca.marca.toString().toLowerCase()));
-          essenciaG = essenciaList;
+          essenciaG = favorite.essenciaList;
         });
       }
     }
 
-    return essenciaList;
+    return favorite.essenciaList;
   }
 
   removeEssencia(index) async {

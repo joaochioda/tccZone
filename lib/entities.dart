@@ -23,9 +23,18 @@ class Essencia {
   final String image;
   final List<Message> message;
 
-  Essencia(this.id, this.marca, this.gosto, this.sabor, this.comentario,
-      this.reputacao, this.status, this.nome, this.proposta, this.image, this.message);
-
+  Essencia(
+      this.id,
+      this.marca,
+      this.gosto,
+      this.sabor,
+      this.comentario,
+      this.reputacao,
+      this.status,
+      this.nome,
+      this.proposta,
+      this.image,
+      this.message);
 }
 
 class Message {
@@ -36,8 +45,15 @@ class Message {
   final String emailOwner;
   final int idOwner;
 
-  Message(this.id, this.date, this.text, this.nameOwner, this.emailOwner, this.idOwner);
+  Message(this.id, this.date, this.text, this.nameOwner, this.emailOwner,
+      this.idOwner);
+}
 
+class Favorite {
+  final List<Essencia> essenciaList;
+  final List<Message> message;
+
+  Favorite(this.essenciaList, this.message);
 }
 
 class Marca {
@@ -57,7 +73,8 @@ class WaitApprove {
   final String message;
   final String status;
 
-  WaitApprove(this.id,this.essencia, this.owner, this.peoplePro, this.peopleAgainst, this.message, this.status);
+  WaitApprove(this.id, this.essencia, this.owner, this.peoplePro,
+      this.peopleAgainst, this.message, this.status);
 }
 
 class EditApprove {
@@ -68,7 +85,8 @@ class EditApprove {
   final List<SimplePerson> peoplePro;
   final List<SimplePerson> peopleAgainst;
 
-  EditApprove(this.id,this.essenciaNova,this.essenciaAntiga ,this.owner, this.peoplePro, this.peopleAgainst);
+  EditApprove(this.id, this.essenciaNova, this.essenciaAntiga, this.owner,
+      this.peoplePro, this.peopleAgainst);
 }
 
 class Person {
@@ -81,7 +99,8 @@ class Person {
   final String pontos;
   final List<Essencia> essencias;
 
-  Person(this.id, this.name, this.estado, this.cidade, this.token, this.email,this.pontos,this.essencias);
+  Person(this.id, this.name, this.estado, this.cidade, this.token, this.email,
+      this.pontos, this.essencias);
 }
 
 class SimplePerson {
@@ -90,7 +109,6 @@ class SimplePerson {
   final String email;
 
   SimplePerson(this.id, this.name, this.email);
-  
 }
 
 class IdNamePerson {
@@ -98,5 +116,4 @@ class IdNamePerson {
   final String name;
 
   IdNamePerson(this.id, this.name);
-  
 }

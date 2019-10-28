@@ -4,26 +4,35 @@ import 'entities.dart';
 import 'editEssencia.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import './api/getFavorite.dart';
 
 class DetailsEssencia extends StatefulWidget {
   final Essencia essencia;
   final String screen;
-  DetailsEssencia({Key key, @required this.essencia, @required this.screen}) : super(key: key);
+  DetailsEssencia({Key key, @required this.essencia, @required this.screen})
+      : super(key: key);
 
   @override
-  _DetailsEssencia createState() => new _DetailsEssencia(essencia,screen);
+  _DetailsEssencia createState() => new _DetailsEssencia(essencia, screen);
 }
 
 class _DetailsEssencia extends State<DetailsEssencia> {
   Essencia essencia;
   String screen;
-  _DetailsEssencia(this.essencia,this.screen);
+  _DetailsEssencia(this.essencia, this.screen);
   String text;
   final _formKey = GlobalKey<FormState>();
 
+  updateEssencia() async {
+    Essencia esse = await getEssencia(essencia.id);
+
+    
+    setState(() {
+      essencia = esse;
+    });
+  }
+
   _navigateAndDisplaySelection(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -38,25 +47,31 @@ class _DetailsEssencia extends State<DetailsEssencia> {
         ..showSnackBar(SnackBar(content: Text("$result")));
     }
   }
- Submit() {
+
+  Submit() async {
     if (_formKey.currentState.validate()) {
-       registerComentario();
-      return true;
+      if (screen == "favorite") {
+        Navigator.pop(context);
+      } else {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+      await registerComentario();
+      updateEssencia();
     }
   }
 
-registerComentario() async{
-var url = 'https://pure-scrubland-45679.herokuapp.com/essencia/${essencia.id}/message';
-Map data = {
-  
-    "idOwner": idMe,
-  
-  "text": text,
-};
-var body = json.encode(data);
-await http.post(url,
+  registerComentario() async {
+    var url =
+        'https://pure-scrubland-45679.herokuapp.com/essencia/${essencia.id}/message';
+    Map data = {
+      "idOwner": idMe,
+      "text": text,
+    };
+    var body = json.encode(data);
+    await http.post(url,
         headers: {"Content-Type": "application/json"}, body: body);
-}
+  }
+
   void _showMaterialDialog(int marcaIndex) {
     showDialog(
         context: context,
@@ -92,13 +107,7 @@ await http.post(url,
                           padding: const EdgeInsets.all(8.0),
                           child: RaisedButton(
                             onPressed: () {
-                              if (Submit() == true && screen == "favorite") {
-                                Navigator.pop(context);
-                              } 
-                              else if(Submit() == true && screen == "search") {
-                                 Navigator.of(context, rootNavigator: true).pop();
-                              
-                              }
+                              Submit();
                             },
                             child: Text("Salvar"),
                           ),
@@ -182,6 +191,7 @@ await http.post(url,
                   );
                 },
                 shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
               )
             ],
           ),
