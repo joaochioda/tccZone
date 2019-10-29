@@ -110,8 +110,6 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essencia"]["id"],
           marca,
           u["essencia"]["gosto"],
-          u["essencia"]["sabor"],
-          u["essencia"]["comentario"],
           u["essencia"]["reputacao"],
           u["essencia"]["status"],
           u["essencia"]["nome"],
@@ -171,8 +169,6 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essenciaAntiga"]["id"],
           marca,
           u["essenciaAntiga"]["gosto"],
-          u["essenciaAntiga"]["sabor"],
-          u["essenciaAntiga"]["comentario"],
           u["essenciaAntiga"]["reputacao"],
           u["essenciaAntiga"]["status"],
           u["essenciaAntiga"]["nome"],
@@ -185,8 +181,6 @@ class _WaitApprovee extends State<WaitApprovee> {
           u["essenciaNova"]["id"],
           marca,
           u["essenciaNova"]["gosto"],
-          u["essenciaNova"]["sabor"],
-          u["essenciaNova"]["comentario"],
           u["essenciaNova"]["reputacao"],
           u["essenciaNova"]["status"],
           u["essenciaNova"]["nome"],
@@ -255,11 +249,7 @@ class _WaitApprovee extends State<WaitApprovee> {
                       child: Text(
                           "Nome: ${waitApprove[marcaIndex].essencia.nome}"),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Text(
-                          "Sabor: ${waitApprove[marcaIndex].essencia.sabor}"),
-                    ),
+                   
                     Padding(
                       padding: EdgeInsets.all(12.0),
                       child: Text(
@@ -275,11 +265,7 @@ class _WaitApprovee extends State<WaitApprovee> {
                       child: Text(
                           "Marca: ${waitApprove[marcaIndex].essencia.marca.marca}"),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Text(
-                          "Comentário: ${waitApprove[marcaIndex].essencia.comentario}"),
-                    ),
+                  
                     Padding(
                       padding: EdgeInsets.all(12.0),
                       child: Text(
@@ -334,16 +320,6 @@ class _WaitApprovee extends State<WaitApprovee> {
                                     fontSize: 12,
                                   ),),
                             ),
-                             Text("Sabor:", style: TextStyle(fontStyle: FontStyle.italic),),
-                            Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child: Text(
-                                  "${editApprove[marcaIndex].essenciaAntiga.sabor} --> ${editApprove[marcaIndex].essenciaNova.sabor}",
-                                  style: new TextStyle(
-                                    fontSize: 12,
-                                  ),),
-                            ),
-                            
                              Text("Proposta:", style: TextStyle(fontStyle: FontStyle.italic),),
                             Padding(
                               padding: EdgeInsets.all(12.0),
@@ -354,15 +330,6 @@ class _WaitApprovee extends State<WaitApprovee> {
                                   ),),
                             ),
 
-                             Text("Comentário:", style: TextStyle(fontStyle: FontStyle.italic),),
-                            Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child: Text(
-                                  "${editApprove[marcaIndex].essenciaAntiga.comentario} --> ${editApprove[marcaIndex].essenciaNova.comentario}",
-                                  style: new TextStyle(
-                                    fontSize: 12,
-                                  ),),
-                            ),
 
                              Text("Dono da edição:", style: TextStyle(fontStyle: FontStyle.italic),),
                             Padding(

@@ -34,8 +34,6 @@ class _RegisterEssencia extends State<RegisterEssencia> {
     var url = 'https://pure-scrubland-45679.herokuapp.com/essencia';
     Map data = {
       "gosto": gosto,
-      "sabor": sabor,
-      "comentario": comentario,
       "nome": nome,
       "proposta": proposta,
       "marca": 
@@ -57,8 +55,6 @@ class _RegisterEssencia extends State<RegisterEssencia> {
         jsonData["id"],
         marc,
         jsonData["gosto"],
-        jsonData["sabor"],
-        jsonData["comentario"],
         jsonData["reputacao"],
         jsonData["nome"],
         jsonData["image"],
@@ -70,8 +66,6 @@ class _RegisterEssencia extends State<RegisterEssencia> {
       "essencia": {
         "id": essencia.id,
         "gosto": essencia.gosto,
-        "sabor": essencia.sabor,
-        "comentario": essencia.comentario,
         "nome": essencia.nome,
         "proposta": essencia.proposta,
         "marca": 
@@ -167,27 +161,7 @@ class _RegisterEssencia extends State<RegisterEssencia> {
                               },
                               onSaved: (value) => gosto = value,
                             ),
-                            TextFormField(
-                              decoration: InputDecoration(labelText: "Sabor"),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Por favor preencha o campo";
-                                }
-                                sabor = value;
-                              },
-                              onSaved: (value) => sabor = value,
-                            ),
-                            TextFormField(
-                              decoration:
-                                  InputDecoration(labelText: "Comentário"),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Por favor preencha o campo";
-                                }
-                                comentario = value;
-                              },
-                            ),
-                             
+                        
                              TextFormField(
                               decoration:
                                   InputDecoration(labelText: "Proposta"),

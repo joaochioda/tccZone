@@ -14,8 +14,6 @@ class Essencia {
   final int id;
   final Marca marca;
   final String gosto;
-  final String comentario;
-  final String sabor;
   final int reputacao;
   final String status;
   final String nome;
@@ -27,8 +25,6 @@ class Essencia {
       this.id,
       this.marca,
       this.gosto,
-      this.sabor,
-      this.comentario,
       this.reputacao,
       this.status,
       this.nome,

@@ -116,8 +116,6 @@ class _MySearchPageState extends State<MySearchPage> {
             u["id"],
             marc,
             u["gosto"],
-            u["sabor"],
-            u["comentario"],
             u["reputacao"],
             u["status"],
             u["nome"],
@@ -134,6 +132,9 @@ class _MySearchPageState extends State<MySearchPage> {
         Marca marc = Marca(u["id"], u["marca"], u["image"]);
         marca.add(marc);
       }
+
+      users.sort((a, b) => a.nome.compareTo(b.nome));
+      marca.sort((a, b) => a.marca.compareTo(b.marca));
 
       if (this.mounted) {
         setState(() {

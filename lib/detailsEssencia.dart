@@ -26,7 +26,6 @@ class _DetailsEssencia extends State<DetailsEssencia> {
   updateEssencia() async {
     Essencia esse = await getEssencia(essencia.id);
 
-    
     setState(() {
       essencia = esse;
     });
@@ -106,6 +105,8 @@ class _DetailsEssencia extends State<DetailsEssencia> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: RaisedButton(
+                            textColor: Colors.white,
+                            color: Colors.blue,
                             onPressed: () {
                               Submit();
                             },
@@ -115,7 +116,7 @@ class _DetailsEssencia extends State<DetailsEssencia> {
                         RaisedButton(
                           padding: const EdgeInsets.all(12.0),
                           textColor: Colors.white,
-                          color: Colors.blue,
+                          color: Colors.red,
                           onPressed: () =>
                               Navigator.of(context, rootNavigator: true).pop(),
                           child: new Text("Fechar"),
@@ -158,10 +159,6 @@ class _DetailsEssencia extends State<DetailsEssencia> {
               ),
               ListTile(
                 title: Text(
-                    "Sabor: ${essencia.sabor != null ? essencia.sabor : ''}"),
-              ),
-              ListTile(
-                title: Text(
                     "Gosto: ${essencia.gosto != null ? essencia.gosto : ''}"),
               ),
               ListTile(
@@ -171,10 +168,6 @@ class _DetailsEssencia extends State<DetailsEssencia> {
               ListTile(
                 title: Text(
                     "Reputação: ${essencia.reputacao != null ? essencia.reputacao : ''}"),
-              ),
-              ListTile(
-                title: Text(
-                    "Comentario: ${essencia.comentario != null ? essencia.comentario : ''}"),
               ),
               ListTile(
                 title: Text("Comentários da comunidade: "),

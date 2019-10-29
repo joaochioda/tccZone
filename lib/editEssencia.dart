@@ -97,28 +97,6 @@ class _EditEssenciaState extends State<EditEssencia> {
                     onSaved: (value) => gosto = value,
                   ),
                   TextFormField(
-                    initialValue: essencia.sabor,
-                    decoration: InputDecoration(labelText: "Sabor"),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Por favor preencha o campo";
-                      }
-                      sabor = value;
-                    },
-                    onSaved: (value) => sabor = value,
-                  ),
-                  TextFormField(
-                    initialValue: essencia.comentario,
-                    decoration: InputDecoration(labelText: "Comentário"),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Por favor preencha o campo";
-                      }
-                      comentario = value;
-                    },
-                    onSaved: (value) => comentario = value,
-                  ),
-                  TextFormField(
                     initialValue: essencia.proposta,
                     decoration: InputDecoration(labelText: "Proposta"),
                     validator: (value) {
